@@ -81,6 +81,19 @@ export type CartItemWithReservedQuantity = {
   reserved_quantity: Scalars['Int'];
 };
 
+export type CheckCouponOutput = {
+  __typename?: 'CheckCouponOutput';
+  discountValue?: Maybe<Scalars['Float']>;
+  message?: Maybe<Scalars['String']>;
+  status: CheckCouponStatus;
+};
+
+export enum CheckCouponStatus {
+  Accepted = 'accepted',
+  Invalid = 'invalid',
+  Valid = 'valid'
+}
+
 export type CouponWithValidity = {
   __typename?: 'CouponWithValidity';
   /** An object relationship */
@@ -176,6 +189,11 @@ export type MarkOrderAsDeliveredOutput = {
   message: Scalars['String'];
 };
 
+export type MarkOrderAsToReassignOutput = {
+  __typename?: 'MarkOrderAsToReassignOutput';
+  message: Scalars['String'];
+};
+
 export enum OperationType {
   Add = 'add',
   Pay = 'pay'
@@ -250,9 +268,32 @@ export enum Precision {
   Low = 'low'
 }
 
+export type PreviewRefund = {
+  __typename?: 'PreviewRefund';
+  amount: Scalars['Float'];
+  coupon_type?: Maybe<Scalars['String']>;
+  coupon_value?: Maybe<Scalars['Float']>;
+  delivery: Scalars['Float'];
+};
+
+export type RefundOrderCompleteOutput = {
+  __typename?: 'RefundOrderCompleteOutput';
+  message: Scalars['String'];
+};
+
 export type RefundOrderOutput = {
   __typename?: 'RefundOrderOutput';
   message: Scalars['String'];
+};
+
+export type RefundReason = {
+  __typename?: 'RefundReason';
+  value?: Maybe<Scalars['String']>;
+};
+
+export type RefundedProduct = {
+  id: Scalars['String'];
+  quantity: Scalars['Int'];
 };
 
 export type RiderChallengeOutput = {
@@ -342,6 +383,21 @@ export type UpdateAdminPasswordOutput = {
 
 export type UpdateRiderLocationOutput = {
   __typename?: 'UpdateRiderLocationOutput';
+  message?: Maybe<Scalars['String']>;
+};
+
+export type UpdateRiderStatusOutput = {
+  __typename?: 'UpdateRiderStatusOutput';
+  message?: Maybe<Scalars['String']>;
+};
+
+export type UpdateRiderTransportModeOutput = {
+  __typename?: 'UpdateRiderTransportModeOutput';
+  message?: Maybe<Scalars['String']>;
+};
+
+export type UpdateRiderWarehouseOutput = {
+  __typename?: 'UpdateRiderWarehouseOutput';
   message?: Maybe<Scalars['String']>;
 };
 
@@ -805,16 +861,20 @@ export type Assignations = {
   batch_id?: Maybe<Scalars['uuid']>;
   batch_priority?: Maybe<Scalars['Int']>;
   bin_reference?: Maybe<Scalars['String']>;
+  canceled_at?: Maybe<Scalars['timestamptz']>;
   created_at: Scalars['timestamptz'];
   estimated_time_to_destination_seconds: Scalars['numeric'];
   id: Scalars['uuid'];
   /** An object relationship */
   order: Orders;
   order_id: Scalars['uuid'];
+  picked_up_at?: Maybe<Scalars['timestamptz']>;
+  ready_to_pickup_at?: Maybe<Scalars['timestamptz']>;
   /** An object relationship */
   rider?: Maybe<Riders>;
   rider_id?: Maybe<Scalars['uuid']>;
   status: Assignation_Status_Enum;
+  to_reassign_at?: Maybe<Scalars['timestamptz']>;
   transporter_name: Delivery_Method_Enum;
   transporter_ref?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -894,14 +954,18 @@ export type Assignations_Bool_Exp = {
   batch_id?: Maybe<Uuid_Comparison_Exp>;
   batch_priority?: Maybe<Int_Comparison_Exp>;
   bin_reference?: Maybe<String_Comparison_Exp>;
+  canceled_at?: Maybe<Timestamptz_Comparison_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   estimated_time_to_destination_seconds?: Maybe<Numeric_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   order?: Maybe<Orders_Bool_Exp>;
   order_id?: Maybe<Uuid_Comparison_Exp>;
+  picked_up_at?: Maybe<Timestamptz_Comparison_Exp>;
+  ready_to_pickup_at?: Maybe<Timestamptz_Comparison_Exp>;
   rider?: Maybe<Riders_Bool_Exp>;
   rider_id?: Maybe<Uuid_Comparison_Exp>;
   status?: Maybe<Assignation_Status_Enum_Comparison_Exp>;
+  to_reassign_at?: Maybe<Timestamptz_Comparison_Exp>;
   transporter_name?: Maybe<Delivery_Method_Enum_Comparison_Exp>;
   transporter_ref?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -929,14 +993,18 @@ export type Assignations_Insert_Input = {
   batch_id?: Maybe<Scalars['uuid']>;
   batch_priority?: Maybe<Scalars['Int']>;
   bin_reference?: Maybe<Scalars['String']>;
+  canceled_at?: Maybe<Scalars['timestamptz']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   estimated_time_to_destination_seconds?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['uuid']>;
   order?: Maybe<Orders_Obj_Rel_Insert_Input>;
   order_id?: Maybe<Scalars['uuid']>;
+  picked_up_at?: Maybe<Scalars['timestamptz']>;
+  ready_to_pickup_at?: Maybe<Scalars['timestamptz']>;
   rider?: Maybe<Riders_Obj_Rel_Insert_Input>;
   rider_id?: Maybe<Scalars['uuid']>;
   status?: Maybe<Assignation_Status_Enum>;
+  to_reassign_at?: Maybe<Scalars['timestamptz']>;
   transporter_name?: Maybe<Delivery_Method_Enum>;
   transporter_ref?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -948,11 +1016,15 @@ export type Assignations_Max_Fields = {
   batch_id?: Maybe<Scalars['uuid']>;
   batch_priority?: Maybe<Scalars['Int']>;
   bin_reference?: Maybe<Scalars['String']>;
+  canceled_at?: Maybe<Scalars['timestamptz']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   estimated_time_to_destination_seconds?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['uuid']>;
   order_id?: Maybe<Scalars['uuid']>;
+  picked_up_at?: Maybe<Scalars['timestamptz']>;
+  ready_to_pickup_at?: Maybe<Scalars['timestamptz']>;
   rider_id?: Maybe<Scalars['uuid']>;
+  to_reassign_at?: Maybe<Scalars['timestamptz']>;
   transporter_ref?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
@@ -962,11 +1034,15 @@ export type Assignations_Max_Order_By = {
   batch_id?: Maybe<Order_By>;
   batch_priority?: Maybe<Order_By>;
   bin_reference?: Maybe<Order_By>;
+  canceled_at?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   estimated_time_to_destination_seconds?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   order_id?: Maybe<Order_By>;
+  picked_up_at?: Maybe<Order_By>;
+  ready_to_pickup_at?: Maybe<Order_By>;
   rider_id?: Maybe<Order_By>;
+  to_reassign_at?: Maybe<Order_By>;
   transporter_ref?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
 };
@@ -977,11 +1053,15 @@ export type Assignations_Min_Fields = {
   batch_id?: Maybe<Scalars['uuid']>;
   batch_priority?: Maybe<Scalars['Int']>;
   bin_reference?: Maybe<Scalars['String']>;
+  canceled_at?: Maybe<Scalars['timestamptz']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   estimated_time_to_destination_seconds?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['uuid']>;
   order_id?: Maybe<Scalars['uuid']>;
+  picked_up_at?: Maybe<Scalars['timestamptz']>;
+  ready_to_pickup_at?: Maybe<Scalars['timestamptz']>;
   rider_id?: Maybe<Scalars['uuid']>;
+  to_reassign_at?: Maybe<Scalars['timestamptz']>;
   transporter_ref?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
@@ -991,11 +1071,15 @@ export type Assignations_Min_Order_By = {
   batch_id?: Maybe<Order_By>;
   batch_priority?: Maybe<Order_By>;
   bin_reference?: Maybe<Order_By>;
+  canceled_at?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   estimated_time_to_destination_seconds?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   order_id?: Maybe<Order_By>;
+  picked_up_at?: Maybe<Order_By>;
+  ready_to_pickup_at?: Maybe<Order_By>;
   rider_id?: Maybe<Order_By>;
+  to_reassign_at?: Maybe<Order_By>;
   transporter_ref?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
 };
@@ -1029,14 +1113,18 @@ export type Assignations_Order_By = {
   batch_id?: Maybe<Order_By>;
   batch_priority?: Maybe<Order_By>;
   bin_reference?: Maybe<Order_By>;
+  canceled_at?: Maybe<Order_By>;
   created_at?: Maybe<Order_By>;
   estimated_time_to_destination_seconds?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   order?: Maybe<Orders_Order_By>;
   order_id?: Maybe<Order_By>;
+  picked_up_at?: Maybe<Order_By>;
+  ready_to_pickup_at?: Maybe<Order_By>;
   rider?: Maybe<Riders_Order_By>;
   rider_id?: Maybe<Order_By>;
   status?: Maybe<Order_By>;
+  to_reassign_at?: Maybe<Order_By>;
   transporter_name?: Maybe<Order_By>;
   transporter_ref?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -1058,6 +1146,8 @@ export enum Assignations_Select_Column {
   /** column name */
   BinReference = 'bin_reference',
   /** column name */
+  CanceledAt = 'canceled_at',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   EstimatedTimeToDestinationSeconds = 'estimated_time_to_destination_seconds',
@@ -1066,9 +1156,15 @@ export enum Assignations_Select_Column {
   /** column name */
   OrderId = 'order_id',
   /** column name */
+  PickedUpAt = 'picked_up_at',
+  /** column name */
+  ReadyToPickupAt = 'ready_to_pickup_at',
+  /** column name */
   RiderId = 'rider_id',
   /** column name */
   Status = 'status',
+  /** column name */
+  ToReassignAt = 'to_reassign_at',
   /** column name */
   TransporterName = 'transporter_name',
   /** column name */
@@ -1083,12 +1179,16 @@ export type Assignations_Set_Input = {
   batch_id?: Maybe<Scalars['uuid']>;
   batch_priority?: Maybe<Scalars['Int']>;
   bin_reference?: Maybe<Scalars['String']>;
+  canceled_at?: Maybe<Scalars['timestamptz']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   estimated_time_to_destination_seconds?: Maybe<Scalars['numeric']>;
   id?: Maybe<Scalars['uuid']>;
   order_id?: Maybe<Scalars['uuid']>;
+  picked_up_at?: Maybe<Scalars['timestamptz']>;
+  ready_to_pickup_at?: Maybe<Scalars['timestamptz']>;
   rider_id?: Maybe<Scalars['uuid']>;
   status?: Maybe<Assignation_Status_Enum>;
+  to_reassign_at?: Maybe<Scalars['timestamptz']>;
   transporter_name?: Maybe<Delivery_Method_Enum>;
   transporter_ref?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -1157,6 +1257,8 @@ export enum Assignations_Update_Column {
   /** column name */
   BinReference = 'bin_reference',
   /** column name */
+  CanceledAt = 'canceled_at',
+  /** column name */
   CreatedAt = 'created_at',
   /** column name */
   EstimatedTimeToDestinationSeconds = 'estimated_time_to_destination_seconds',
@@ -1165,9 +1267,15 @@ export enum Assignations_Update_Column {
   /** column name */
   OrderId = 'order_id',
   /** column name */
+  PickedUpAt = 'picked_up_at',
+  /** column name */
+  ReadyToPickupAt = 'ready_to_pickup_at',
+  /** column name */
   RiderId = 'rider_id',
   /** column name */
   Status = 'status',
+  /** column name */
+  ToReassignAt = 'to_reassign_at',
   /** column name */
   TransporterName = 'transporter_name',
   /** column name */
@@ -1218,6 +1326,10 @@ export type Assignations_Variance_Order_By = {
 /** columns and relationships of "banners" */
 export type Banners = {
   __typename?: 'banners';
+  /** An array relationship */
+  banners_warehouses: Array<Banners_Warehouses>;
+  /** An aggregate relationship */
+  banners_warehouses_aggregate: Banners_Warehouses_Aggregate;
   created_at: Scalars['timestamptz'];
   id: Scalars['uuid'];
   is_active: Scalars['Boolean'];
@@ -1228,6 +1340,27 @@ export type Banners = {
   text_modal?: Maybe<Scalars['String']>;
   title_modal?: Maybe<Scalars['String']>;
   updated_at: Scalars['timestamptz'];
+  zone: Zone_Enum;
+};
+
+
+/** columns and relationships of "banners" */
+export type BannersBanners_WarehousesArgs = {
+  distinct_on?: Maybe<Array<Banners_Warehouses_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Banners_Warehouses_Order_By>>;
+  where?: Maybe<Banners_Warehouses_Bool_Exp>;
+};
+
+
+/** columns and relationships of "banners" */
+export type BannersBanners_Warehouses_AggregateArgs = {
+  distinct_on?: Maybe<Array<Banners_Warehouses_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Banners_Warehouses_Order_By>>;
+  where?: Maybe<Banners_Warehouses_Bool_Exp>;
 };
 
 /** aggregated selection of "banners" */
@@ -1271,6 +1404,7 @@ export type Banners_Bool_Exp = {
   _and?: Maybe<Array<Banners_Bool_Exp>>;
   _not?: Maybe<Banners_Bool_Exp>;
   _or?: Maybe<Array<Banners_Bool_Exp>>;
+  banners_warehouses?: Maybe<Banners_Warehouses_Bool_Exp>;
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   is_active?: Maybe<Boolean_Comparison_Exp>;
@@ -1281,6 +1415,7 @@ export type Banners_Bool_Exp = {
   text_modal?: Maybe<String_Comparison_Exp>;
   title_modal?: Maybe<String_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  zone?: Maybe<Zone_Enum_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "banners" */
@@ -1296,6 +1431,7 @@ export type Banners_Inc_Input = {
 
 /** input type for inserting data into table "banners" */
 export type Banners_Insert_Input = {
+  banners_warehouses?: Maybe<Banners_Warehouses_Arr_Rel_Insert_Input>;
   created_at?: Maybe<Scalars['timestamptz']>;
   id?: Maybe<Scalars['uuid']>;
   is_active?: Maybe<Scalars['Boolean']>;
@@ -1306,6 +1442,7 @@ export type Banners_Insert_Input = {
   text_modal?: Maybe<Scalars['String']>;
   title_modal?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate max on columns */
@@ -1354,6 +1491,7 @@ export type Banners_On_Conflict = {
 
 /** Ordering options when selecting data from "banners". */
 export type Banners_Order_By = {
+  banners_warehouses_aggregate?: Maybe<Banners_Warehouses_Aggregate_Order_By>;
   created_at?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   is_active?: Maybe<Order_By>;
@@ -1364,6 +1502,7 @@ export type Banners_Order_By = {
   text_modal?: Maybe<Order_By>;
   title_modal?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
+  zone?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: banners */
@@ -1392,7 +1531,9 @@ export enum Banners_Select_Column {
   /** column name */
   TitleModal = 'title_modal',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** input type for updating data in table "banners" */
@@ -1407,6 +1548,7 @@ export type Banners_Set_Input = {
   text_modal?: Maybe<Scalars['String']>;
   title_modal?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate stddev on columns */
@@ -1454,7 +1596,9 @@ export enum Banners_Update_Column {
   /** column name */
   TitleModal = 'title_modal',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** aggregate var_pop on columns */
@@ -1474,6 +1618,165 @@ export type Banners_Variance_Fields = {
   __typename?: 'banners_variance_fields';
   position?: Maybe<Scalars['Float']>;
 };
+
+/** columns and relationships of "banners_warehouses" */
+export type Banners_Warehouses = {
+  __typename?: 'banners_warehouses';
+  banner_id: Scalars['uuid'];
+  id: Scalars['uuid'];
+  /** An object relationship */
+  warehouse: Warehouses;
+  warehouse_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "banners_warehouses" */
+export type Banners_Warehouses_Aggregate = {
+  __typename?: 'banners_warehouses_aggregate';
+  aggregate?: Maybe<Banners_Warehouses_Aggregate_Fields>;
+  nodes: Array<Banners_Warehouses>;
+};
+
+/** aggregate fields of "banners_warehouses" */
+export type Banners_Warehouses_Aggregate_Fields = {
+  __typename?: 'banners_warehouses_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Banners_Warehouses_Max_Fields>;
+  min?: Maybe<Banners_Warehouses_Min_Fields>;
+};
+
+
+/** aggregate fields of "banners_warehouses" */
+export type Banners_Warehouses_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Banners_Warehouses_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** order by aggregate values of table "banners_warehouses" */
+export type Banners_Warehouses_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Banners_Warehouses_Max_Order_By>;
+  min?: Maybe<Banners_Warehouses_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "banners_warehouses" */
+export type Banners_Warehouses_Arr_Rel_Insert_Input = {
+  data: Array<Banners_Warehouses_Insert_Input>;
+  /** on conflict condition */
+  on_conflict?: Maybe<Banners_Warehouses_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "banners_warehouses". All fields are combined with a logical 'AND'. */
+export type Banners_Warehouses_Bool_Exp = {
+  _and?: Maybe<Array<Banners_Warehouses_Bool_Exp>>;
+  _not?: Maybe<Banners_Warehouses_Bool_Exp>;
+  _or?: Maybe<Array<Banners_Warehouses_Bool_Exp>>;
+  banner_id?: Maybe<Uuid_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  warehouse?: Maybe<Warehouses_Bool_Exp>;
+  warehouse_id?: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "banners_warehouses" */
+export enum Banners_Warehouses_Constraint {
+  /** unique or primary key constraint */
+  BannersWarehousesIdKey = 'banners_warehouses_id_key',
+  /** unique or primary key constraint */
+  BannersWarehousesPkey = 'banners_warehouses_pkey'
+}
+
+/** input type for inserting data into table "banners_warehouses" */
+export type Banners_Warehouses_Insert_Input = {
+  banner_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  warehouse?: Maybe<Warehouses_Obj_Rel_Insert_Input>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Banners_Warehouses_Max_Fields = {
+  __typename?: 'banners_warehouses_max_fields';
+  banner_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by max() on columns of table "banners_warehouses" */
+export type Banners_Warehouses_Max_Order_By = {
+  banner_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  warehouse_id?: Maybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Banners_Warehouses_Min_Fields = {
+  __typename?: 'banners_warehouses_min_fields';
+  banner_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "banners_warehouses" */
+export type Banners_Warehouses_Min_Order_By = {
+  banner_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  warehouse_id?: Maybe<Order_By>;
+};
+
+/** response of any mutation on the table "banners_warehouses" */
+export type Banners_Warehouses_Mutation_Response = {
+  __typename?: 'banners_warehouses_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Banners_Warehouses>;
+};
+
+/** on conflict condition type for table "banners_warehouses" */
+export type Banners_Warehouses_On_Conflict = {
+  constraint: Banners_Warehouses_Constraint;
+  update_columns?: Array<Banners_Warehouses_Update_Column>;
+  where?: Maybe<Banners_Warehouses_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "banners_warehouses". */
+export type Banners_Warehouses_Order_By = {
+  banner_id?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  warehouse?: Maybe<Warehouses_Order_By>;
+  warehouse_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: banners_warehouses */
+export type Banners_Warehouses_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "banners_warehouses" */
+export enum Banners_Warehouses_Select_Column {
+  /** column name */
+  BannerId = 'banner_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  WarehouseId = 'warehouse_id'
+}
+
+/** input type for updating data in table "banners_warehouses" */
+export type Banners_Warehouses_Set_Input = {
+  banner_id?: Maybe<Scalars['uuid']>;
+  id?: Maybe<Scalars['uuid']>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** update columns of table "banners_warehouses" */
+export enum Banners_Warehouses_Update_Column {
+  /** column name */
+  BannerId = 'banner_id',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  WarehouseId = 'warehouse_id'
+}
 
 /** columns and relationships of "batches" */
 export type Batches = {
@@ -2026,6 +2329,7 @@ export type Bundles = {
   name: Scalars['String'];
   picture?: Maybe<Scalars['String']>;
   sku: Scalars['String'];
+  zone: Zone_Enum;
 };
 
 
@@ -2147,6 +2451,7 @@ export type Bundles_Bool_Exp = {
   name?: Maybe<String_Comparison_Exp>;
   picture?: Maybe<String_Comparison_Exp>;
   sku?: Maybe<String_Comparison_Exp>;
+  zone?: Maybe<Zone_Enum_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "bundles" */
@@ -2171,6 +2476,7 @@ export type Bundles_Insert_Input = {
   name?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
   sku?: Maybe<Scalars['String']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate max on columns */
@@ -2230,6 +2536,7 @@ export type Bundles_Order_By = {
   name?: Maybe<Order_By>;
   picture?: Maybe<Order_By>;
   sku?: Maybe<Order_By>;
+  zone?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: bundles */
@@ -2254,7 +2561,9 @@ export enum Bundles_Select_Column {
   /** column name */
   Picture = 'picture',
   /** column name */
-  Sku = 'sku'
+  Sku = 'sku',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** input type for updating data in table "bundles" */
@@ -2267,6 +2576,7 @@ export type Bundles_Set_Input = {
   name?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
   sku?: Maybe<Scalars['String']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** update columns of table "bundles" */
@@ -2286,7 +2596,9 @@ export enum Bundles_Update_Column {
   /** column name */
   Picture = 'picture',
   /** column name */
-  Sku = 'sku'
+  Sku = 'sku',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** columns and relationships of "cart_items" */
@@ -2478,7 +2790,7 @@ export type Categories = {
   /** An aggregate relationship */
   category_warehouses_aggregate: Warehouse_Category_Aggregate;
   created_at?: Maybe<Scalars['timestamptz']>;
-  handle?: Maybe<Scalars['String']>;
+  handle: Scalars['String'];
   id: Scalars['uuid'];
   name: Scalars['String'];
   picture?: Maybe<Scalars['String']>;
@@ -3470,6 +3782,7 @@ export enum Coupon_Tag_Constraint {
 }
 
 export enum Coupon_Tag_Enum {
+  AutoCustomRefundReason = 'auto_custom_refund_reason',
   CommercialPlanning = 'commercial_planning',
   CreditInfluence = 'credit_influence',
   CustomerRelationshipManagement = 'customer_relationship_management',
@@ -3479,6 +3792,7 @@ export enum Coupon_Tag_Enum {
   FreeDelivery = 'free_delivery',
   Frozen = 'frozen',
   Godchild = 'godchild',
+  Guaranty_2y = 'guaranty_2y',
   Influence = 'influence',
   Internal = 'internal',
   LateDelivery = 'late_delivery',
@@ -3487,14 +3801,18 @@ export enum Coupon_Tag_Enum {
   Offline = 'offline',
   OldShopify = 'old_shopify',
   OnlinePerformance = 'online_performance',
+  OrderCanceled = 'order_canceled',
+  OrderNotDelivered = 'order_not_delivered',
   Partnership = 'partnership',
   PromoCodeIssue = 'promo_code_issue',
   Referral = 'referral',
   ReferralCodeIssue = 'referral_code_issue',
   RenewOrder = 'renew_order',
   Renewal = 'renewal',
+  Retractation_14d = 'retractation_14d',
   RiderIssue = 'rider_issue',
   RottenProduct = 'rotten_product',
+  UserChangeAddress = 'user_change_address',
   WrongProduct = 'wrong_product'
 }
 
@@ -3762,6 +4080,7 @@ export type Coupons = {
   type: Discount_Type_Enum;
   updated_at: Scalars['timestamptz'];
   user_id?: Maybe<Scalars['uuid']>;
+  zone: Zone_Enum;
 };
 
 
@@ -3994,6 +4313,7 @@ export type Coupons_Bool_Exp = {
   type?: Maybe<Discount_Type_Enum_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   user_id?: Maybe<Uuid_Comparison_Exp>;
+  zone?: Maybe<Zone_Enum_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "coupons" */
@@ -4046,6 +4366,7 @@ export type Coupons_Insert_Input = {
   type?: Maybe<Discount_Type_Enum>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['uuid']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate max on columns */
@@ -4187,6 +4508,7 @@ export type Coupons_Order_By = {
   type?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
   user_id?: Maybe<Order_By>;
+  zone?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: coupons */
@@ -4237,7 +4559,9 @@ export enum Coupons_Select_Column {
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
-  UserId = 'user_id'
+  UserId = 'user_id',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** input type for updating data in table "coupons" */
@@ -4263,6 +4587,7 @@ export type Coupons_Set_Input = {
   type?: Maybe<Discount_Type_Enum>;
   updated_at?: Maybe<Scalars['timestamptz']>;
   user_id?: Maybe<Scalars['uuid']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate stddev on columns */
@@ -4408,7 +4733,9 @@ export enum Coupons_Update_Column {
   /** column name */
   UpdatedAt = 'updated_at',
   /** column name */
-  UserId = 'user_id'
+  UserId = 'user_id',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** aggregate var_pop on columns */
@@ -4502,6 +4829,7 @@ export type Date_Comparison_Exp = {
 /** columns and relationships of "deliveries" */
 export type Deliveries = {
   __typename?: 'deliveries';
+  additional_transporter_refs?: Maybe<Scalars['_text']>;
   arrived_at_client_at?: Maybe<Scalars['timestamptz']>;
   back_to_hub_at?: Maybe<Scalars['timestamptz']>;
   batch_id?: Maybe<Scalars['uuid']>;
@@ -4517,6 +4845,8 @@ export type Deliveries = {
   group?: Maybe<Deliveries_Group>;
   group_id?: Maybe<Scalars['uuid']>;
   group_order?: Maybe<Scalars['Int']>;
+  has_forced_arrived_at_client?: Maybe<Scalars['Boolean']>;
+  has_forced_back_to_hub?: Maybe<Scalars['Boolean']>;
   id: Scalars['uuid'];
   latitude?: Maybe<Scalars['float8']>;
   longitude?: Maybe<Scalars['float8']>;
@@ -4533,6 +4863,7 @@ export type Deliveries = {
   shift_id?: Maybe<Scalars['uuid']>;
   started_at?: Maybe<Scalars['timestamptz']>;
   status: Delivery_Status_Enum;
+  transport_mode?: Maybe<Transport_Mode_Enum>;
   updated_at: Scalars['timestamptz'];
 };
 
@@ -4612,6 +4943,7 @@ export type Deliveries_Bool_Exp = {
   _and?: Maybe<Array<Deliveries_Bool_Exp>>;
   _not?: Maybe<Deliveries_Bool_Exp>;
   _or?: Maybe<Array<Deliveries_Bool_Exp>>;
+  additional_transporter_refs?: Maybe<_Text_Comparison_Exp>;
   arrived_at_client_at?: Maybe<Timestamptz_Comparison_Exp>;
   back_to_hub_at?: Maybe<Timestamptz_Comparison_Exp>;
   batch_id?: Maybe<Uuid_Comparison_Exp>;
@@ -4626,6 +4958,8 @@ export type Deliveries_Bool_Exp = {
   group?: Maybe<Deliveries_Group_Bool_Exp>;
   group_id?: Maybe<Uuid_Comparison_Exp>;
   group_order?: Maybe<Int_Comparison_Exp>;
+  has_forced_arrived_at_client?: Maybe<Boolean_Comparison_Exp>;
+  has_forced_back_to_hub?: Maybe<Boolean_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   latitude?: Maybe<Float8_Comparison_Exp>;
   longitude?: Maybe<Float8_Comparison_Exp>;
@@ -4640,6 +4974,7 @@ export type Deliveries_Bool_Exp = {
   shift_id?: Maybe<Uuid_Comparison_Exp>;
   started_at?: Maybe<Timestamptz_Comparison_Exp>;
   status?: Maybe<Delivery_Status_Enum_Comparison_Exp>;
+  transport_mode?: Maybe<Transport_Mode_Enum_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -4771,6 +5106,7 @@ export type Deliveries_Inc_Input = {
 
 /** input type for inserting data into table "deliveries" */
 export type Deliveries_Insert_Input = {
+  additional_transporter_refs?: Maybe<Scalars['_text']>;
   arrived_at_client_at?: Maybe<Scalars['timestamptz']>;
   back_to_hub_at?: Maybe<Scalars['timestamptz']>;
   batch_id?: Maybe<Scalars['uuid']>;
@@ -4785,6 +5121,8 @@ export type Deliveries_Insert_Input = {
   group?: Maybe<Deliveries_Group_Obj_Rel_Insert_Input>;
   group_id?: Maybe<Scalars['uuid']>;
   group_order?: Maybe<Scalars['Int']>;
+  has_forced_arrived_at_client?: Maybe<Scalars['Boolean']>;
+  has_forced_back_to_hub?: Maybe<Scalars['Boolean']>;
   id?: Maybe<Scalars['uuid']>;
   latitude?: Maybe<Scalars['float8']>;
   longitude?: Maybe<Scalars['float8']>;
@@ -4799,6 +5137,7 @@ export type Deliveries_Insert_Input = {
   shift_id?: Maybe<Scalars['uuid']>;
   started_at?: Maybe<Scalars['timestamptz']>;
   status?: Maybe<Delivery_Status_Enum>;
+  transport_mode?: Maybe<Transport_Mode_Enum>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -4930,6 +5269,7 @@ export type Deliveries_On_Conflict = {
 
 /** Ordering options when selecting data from "deliveries". */
 export type Deliveries_Order_By = {
+  additional_transporter_refs?: Maybe<Order_By>;
   arrived_at_client_at?: Maybe<Order_By>;
   back_to_hub_at?: Maybe<Order_By>;
   batch_id?: Maybe<Order_By>;
@@ -4944,6 +5284,8 @@ export type Deliveries_Order_By = {
   group?: Maybe<Deliveries_Group_Order_By>;
   group_id?: Maybe<Order_By>;
   group_order?: Maybe<Order_By>;
+  has_forced_arrived_at_client?: Maybe<Order_By>;
+  has_forced_back_to_hub?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   latitude?: Maybe<Order_By>;
   longitude?: Maybe<Order_By>;
@@ -4958,6 +5300,7 @@ export type Deliveries_Order_By = {
   shift_id?: Maybe<Order_By>;
   started_at?: Maybe<Order_By>;
   status?: Maybe<Order_By>;
+  transport_mode?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
 };
 
@@ -4968,6 +5311,8 @@ export type Deliveries_Pk_Columns_Input = {
 
 /** select columns of table "deliveries" */
 export enum Deliveries_Select_Column {
+  /** column name */
+  AdditionalTransporterRefs = 'additional_transporter_refs',
   /** column name */
   ArrivedAtClientAt = 'arrived_at_client_at',
   /** column name */
@@ -4995,6 +5340,10 @@ export enum Deliveries_Select_Column {
   /** column name */
   GroupOrder = 'group_order',
   /** column name */
+  HasForcedArrivedAtClient = 'has_forced_arrived_at_client',
+  /** column name */
+  HasForcedBackToHub = 'has_forced_back_to_hub',
+  /** column name */
   Id = 'id',
   /** column name */
   Latitude = 'latitude',
@@ -5019,11 +5368,14 @@ export enum Deliveries_Select_Column {
   /** column name */
   Status = 'status',
   /** column name */
+  TransportMode = 'transport_mode',
+  /** column name */
   UpdatedAt = 'updated_at'
 }
 
 /** input type for updating data in table "deliveries" */
 export type Deliveries_Set_Input = {
+  additional_transporter_refs?: Maybe<Scalars['_text']>;
   arrived_at_client_at?: Maybe<Scalars['timestamptz']>;
   back_to_hub_at?: Maybe<Scalars['timestamptz']>;
   batch_id?: Maybe<Scalars['uuid']>;
@@ -5037,6 +5389,8 @@ export type Deliveries_Set_Input = {
   eta?: Maybe<Scalars['timestamptz']>;
   group_id?: Maybe<Scalars['uuid']>;
   group_order?: Maybe<Scalars['Int']>;
+  has_forced_arrived_at_client?: Maybe<Scalars['Boolean']>;
+  has_forced_back_to_hub?: Maybe<Scalars['Boolean']>;
   id?: Maybe<Scalars['uuid']>;
   latitude?: Maybe<Scalars['float8']>;
   longitude?: Maybe<Scalars['float8']>;
@@ -5049,6 +5403,7 @@ export type Deliveries_Set_Input = {
   shift_id?: Maybe<Scalars['uuid']>;
   started_at?: Maybe<Scalars['timestamptz']>;
   status?: Maybe<Delivery_Status_Enum>;
+  transport_mode?: Maybe<Transport_Mode_Enum>;
   updated_at?: Maybe<Scalars['timestamptz']>;
 };
 
@@ -5131,6 +5486,8 @@ export type Deliveries_Sum_Order_By = {
 /** update columns of table "deliveries" */
 export enum Deliveries_Update_Column {
   /** column name */
+  AdditionalTransporterRefs = 'additional_transporter_refs',
+  /** column name */
   ArrivedAtClientAt = 'arrived_at_client_at',
   /** column name */
   BackToHubAt = 'back_to_hub_at',
@@ -5157,6 +5514,10 @@ export enum Deliveries_Update_Column {
   /** column name */
   GroupOrder = 'group_order',
   /** column name */
+  HasForcedArrivedAtClient = 'has_forced_arrived_at_client',
+  /** column name */
+  HasForcedBackToHub = 'has_forced_back_to_hub',
+  /** column name */
   Id = 'id',
   /** column name */
   Latitude = 'latitude',
@@ -5180,6 +5541,8 @@ export enum Deliveries_Update_Column {
   StartedAt = 'started_at',
   /** column name */
   Status = 'status',
+  /** column name */
+  TransportMode = 'transport_mode',
   /** column name */
   UpdatedAt = 'updated_at'
 }
@@ -5940,6 +6303,8 @@ export type Discounts = {
   product_id?: Maybe<Scalars['uuid']>;
   start_time: Scalars['timestamptz'];
   ttc_price?: Maybe<Scalars['numeric']>;
+  /** An object relationship */
+  warehouse?: Maybe<Warehouses>;
   warehouse_id?: Maybe<Scalars['uuid']>;
 };
 
@@ -6027,6 +6392,7 @@ export type Discounts_Bool_Exp = {
   product_id?: Maybe<Uuid_Comparison_Exp>;
   start_time?: Maybe<Timestamptz_Comparison_Exp>;
   ttc_price?: Maybe<Numeric_Comparison_Exp>;
+  warehouse?: Maybe<Warehouses_Bool_Exp>;
   warehouse_id?: Maybe<Uuid_Comparison_Exp>;
 };
 
@@ -6056,6 +6422,7 @@ export type Discounts_Insert_Input = {
   product_id?: Maybe<Scalars['uuid']>;
   start_time?: Maybe<Scalars['timestamptz']>;
   ttc_price?: Maybe<Scalars['numeric']>;
+  warehouse?: Maybe<Warehouses_Obj_Rel_Insert_Input>;
   warehouse_id?: Maybe<Scalars['uuid']>;
 };
 
@@ -6147,6 +6514,7 @@ export type Discounts_Order_By = {
   product_id?: Maybe<Order_By>;
   start_time?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
+  warehouse?: Maybe<Warehouses_Order_By>;
   warehouse_id?: Maybe<Order_By>;
 };
 
@@ -8748,13 +9116,16 @@ export type Inventory_Products = {
   discounts: Array<Discounts>;
   /** An aggregate relationship */
   discounts_aggregate: Discounts_Aggregate;
+  hub_stock: Scalars['Int'];
   id: Scalars['uuid'];
   is_displayed: Scalars['Boolean'];
   is_referenced: Scalars['Boolean'];
+  is_ttc_price_validated: Scalars['Boolean'];
   loyalty_value: Scalars['Int'];
   /** An object relationship */
   product: Products;
   product_id: Scalars['uuid'];
+  reserved_stock: Scalars['Int'];
   stock_available: Scalars['Int'];
   ttc_price: Scalars['numeric'];
   updated_at: Scalars['timestamptz'];
@@ -8839,7 +9210,9 @@ export type Inventory_Products_Arr_Rel_Insert_Input = {
 export type Inventory_Products_Avg_Fields = {
   __typename?: 'inventory_products_avg_fields';
   custom_loyalty_value?: Maybe<Scalars['Float']>;
+  hub_stock?: Maybe<Scalars['Float']>;
   loyalty_value?: Maybe<Scalars['Float']>;
+  reserved_stock?: Maybe<Scalars['Float']>;
   stock_available?: Maybe<Scalars['Float']>;
   ttc_price?: Maybe<Scalars['Float']>;
 };
@@ -8847,7 +9220,9 @@ export type Inventory_Products_Avg_Fields = {
 /** order by avg() on columns of table "inventory_products" */
 export type Inventory_Products_Avg_Order_By = {
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
 };
@@ -8861,12 +9236,15 @@ export type Inventory_Products_Bool_Exp = {
   created_at?: Maybe<Timestamptz_Comparison_Exp>;
   custom_loyalty_value?: Maybe<Int_Comparison_Exp>;
   discounts?: Maybe<Discounts_Bool_Exp>;
+  hub_stock?: Maybe<Int_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   is_displayed?: Maybe<Boolean_Comparison_Exp>;
   is_referenced?: Maybe<Boolean_Comparison_Exp>;
+  is_ttc_price_validated?: Maybe<Boolean_Comparison_Exp>;
   loyalty_value?: Maybe<Int_Comparison_Exp>;
   product?: Maybe<Products_Bool_Exp>;
   product_id?: Maybe<Uuid_Comparison_Exp>;
+  reserved_stock?: Maybe<Int_Comparison_Exp>;
   stock_available?: Maybe<Int_Comparison_Exp>;
   ttc_price?: Maybe<Numeric_Comparison_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
@@ -8885,7 +9263,9 @@ export enum Inventory_Products_Constraint {
 /** input type for incrementing numeric columns in table "inventory_products" */
 export type Inventory_Products_Inc_Input = {
   custom_loyalty_value?: Maybe<Scalars['Int']>;
+  hub_stock?: Maybe<Scalars['Int']>;
   loyalty_value?: Maybe<Scalars['Int']>;
+  reserved_stock?: Maybe<Scalars['Int']>;
   stock_available?: Maybe<Scalars['Int']>;
   ttc_price?: Maybe<Scalars['numeric']>;
 };
@@ -8896,12 +9276,15 @@ export type Inventory_Products_Insert_Input = {
   created_at?: Maybe<Scalars['timestamptz']>;
   custom_loyalty_value?: Maybe<Scalars['Int']>;
   discounts?: Maybe<Discounts_Arr_Rel_Insert_Input>;
+  hub_stock?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   is_displayed?: Maybe<Scalars['Boolean']>;
   is_referenced?: Maybe<Scalars['Boolean']>;
+  is_ttc_price_validated?: Maybe<Scalars['Boolean']>;
   loyalty_value?: Maybe<Scalars['Int']>;
   product?: Maybe<Products_Obj_Rel_Insert_Input>;
   product_id?: Maybe<Scalars['uuid']>;
+  reserved_stock?: Maybe<Scalars['Int']>;
   stock_available?: Maybe<Scalars['Int']>;
   ttc_price?: Maybe<Scalars['numeric']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -8914,9 +9297,11 @@ export type Inventory_Products_Max_Fields = {
   __typename?: 'inventory_products_max_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
   custom_loyalty_value?: Maybe<Scalars['Int']>;
+  hub_stock?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   loyalty_value?: Maybe<Scalars['Int']>;
   product_id?: Maybe<Scalars['uuid']>;
+  reserved_stock?: Maybe<Scalars['Int']>;
   stock_available?: Maybe<Scalars['Int']>;
   ttc_price?: Maybe<Scalars['numeric']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -8927,9 +9312,11 @@ export type Inventory_Products_Max_Fields = {
 export type Inventory_Products_Max_Order_By = {
   created_at?: Maybe<Order_By>;
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
   product_id?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -8941,9 +9328,11 @@ export type Inventory_Products_Min_Fields = {
   __typename?: 'inventory_products_min_fields';
   created_at?: Maybe<Scalars['timestamptz']>;
   custom_loyalty_value?: Maybe<Scalars['Int']>;
+  hub_stock?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   loyalty_value?: Maybe<Scalars['Int']>;
   product_id?: Maybe<Scalars['uuid']>;
+  reserved_stock?: Maybe<Scalars['Int']>;
   stock_available?: Maybe<Scalars['Int']>;
   ttc_price?: Maybe<Scalars['numeric']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -8954,9 +9343,11 @@ export type Inventory_Products_Min_Fields = {
 export type Inventory_Products_Min_Order_By = {
   created_at?: Maybe<Order_By>;
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
   product_id?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -8992,12 +9383,15 @@ export type Inventory_Products_Order_By = {
   created_at?: Maybe<Order_By>;
   custom_loyalty_value?: Maybe<Order_By>;
   discounts_aggregate?: Maybe<Discounts_Aggregate_Order_By>;
+  hub_stock?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   is_displayed?: Maybe<Order_By>;
   is_referenced?: Maybe<Order_By>;
+  is_ttc_price_validated?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
   product?: Maybe<Products_Order_By>;
   product_id?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
   updated_at?: Maybe<Order_By>;
@@ -9020,15 +9414,21 @@ export enum Inventory_Products_Select_Column {
   /** column name */
   CustomLoyaltyValue = 'custom_loyalty_value',
   /** column name */
+  HubStock = 'hub_stock',
+  /** column name */
   Id = 'id',
   /** column name */
   IsDisplayed = 'is_displayed',
   /** column name */
   IsReferenced = 'is_referenced',
   /** column name */
+  IsTtcPriceValidated = 'is_ttc_price_validated',
+  /** column name */
   LoyaltyValue = 'loyalty_value',
   /** column name */
   ProductId = 'product_id',
+  /** column name */
+  ReservedStock = 'reserved_stock',
   /** column name */
   StockAvailable = 'stock_available',
   /** column name */
@@ -9044,11 +9444,14 @@ export type Inventory_Products_Set_Input = {
   always_visible?: Maybe<Scalars['Boolean']>;
   created_at?: Maybe<Scalars['timestamptz']>;
   custom_loyalty_value?: Maybe<Scalars['Int']>;
+  hub_stock?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['uuid']>;
   is_displayed?: Maybe<Scalars['Boolean']>;
   is_referenced?: Maybe<Scalars['Boolean']>;
+  is_ttc_price_validated?: Maybe<Scalars['Boolean']>;
   loyalty_value?: Maybe<Scalars['Int']>;
   product_id?: Maybe<Scalars['uuid']>;
+  reserved_stock?: Maybe<Scalars['Int']>;
   stock_available?: Maybe<Scalars['Int']>;
   ttc_price?: Maybe<Scalars['numeric']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
@@ -9059,7 +9462,9 @@ export type Inventory_Products_Set_Input = {
 export type Inventory_Products_Stddev_Fields = {
   __typename?: 'inventory_products_stddev_fields';
   custom_loyalty_value?: Maybe<Scalars['Float']>;
+  hub_stock?: Maybe<Scalars['Float']>;
   loyalty_value?: Maybe<Scalars['Float']>;
+  reserved_stock?: Maybe<Scalars['Float']>;
   stock_available?: Maybe<Scalars['Float']>;
   ttc_price?: Maybe<Scalars['Float']>;
 };
@@ -9067,7 +9472,9 @@ export type Inventory_Products_Stddev_Fields = {
 /** order by stddev() on columns of table "inventory_products" */
 export type Inventory_Products_Stddev_Order_By = {
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
 };
@@ -9076,7 +9483,9 @@ export type Inventory_Products_Stddev_Order_By = {
 export type Inventory_Products_Stddev_Pop_Fields = {
   __typename?: 'inventory_products_stddev_pop_fields';
   custom_loyalty_value?: Maybe<Scalars['Float']>;
+  hub_stock?: Maybe<Scalars['Float']>;
   loyalty_value?: Maybe<Scalars['Float']>;
+  reserved_stock?: Maybe<Scalars['Float']>;
   stock_available?: Maybe<Scalars['Float']>;
   ttc_price?: Maybe<Scalars['Float']>;
 };
@@ -9084,7 +9493,9 @@ export type Inventory_Products_Stddev_Pop_Fields = {
 /** order by stddev_pop() on columns of table "inventory_products" */
 export type Inventory_Products_Stddev_Pop_Order_By = {
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
 };
@@ -9093,7 +9504,9 @@ export type Inventory_Products_Stddev_Pop_Order_By = {
 export type Inventory_Products_Stddev_Samp_Fields = {
   __typename?: 'inventory_products_stddev_samp_fields';
   custom_loyalty_value?: Maybe<Scalars['Float']>;
+  hub_stock?: Maybe<Scalars['Float']>;
   loyalty_value?: Maybe<Scalars['Float']>;
+  reserved_stock?: Maybe<Scalars['Float']>;
   stock_available?: Maybe<Scalars['Float']>;
   ttc_price?: Maybe<Scalars['Float']>;
 };
@@ -9101,7 +9514,9 @@ export type Inventory_Products_Stddev_Samp_Fields = {
 /** order by stddev_samp() on columns of table "inventory_products" */
 export type Inventory_Products_Stddev_Samp_Order_By = {
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
 };
@@ -9110,7 +9525,9 @@ export type Inventory_Products_Stddev_Samp_Order_By = {
 export type Inventory_Products_Sum_Fields = {
   __typename?: 'inventory_products_sum_fields';
   custom_loyalty_value?: Maybe<Scalars['Int']>;
+  hub_stock?: Maybe<Scalars['Int']>;
   loyalty_value?: Maybe<Scalars['Int']>;
+  reserved_stock?: Maybe<Scalars['Int']>;
   stock_available?: Maybe<Scalars['Int']>;
   ttc_price?: Maybe<Scalars['numeric']>;
 };
@@ -9118,7 +9535,9 @@ export type Inventory_Products_Sum_Fields = {
 /** order by sum() on columns of table "inventory_products" */
 export type Inventory_Products_Sum_Order_By = {
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
 };
@@ -9132,15 +9551,21 @@ export enum Inventory_Products_Update_Column {
   /** column name */
   CustomLoyaltyValue = 'custom_loyalty_value',
   /** column name */
+  HubStock = 'hub_stock',
+  /** column name */
   Id = 'id',
   /** column name */
   IsDisplayed = 'is_displayed',
   /** column name */
   IsReferenced = 'is_referenced',
   /** column name */
+  IsTtcPriceValidated = 'is_ttc_price_validated',
+  /** column name */
   LoyaltyValue = 'loyalty_value',
   /** column name */
   ProductId = 'product_id',
+  /** column name */
+  ReservedStock = 'reserved_stock',
   /** column name */
   StockAvailable = 'stock_available',
   /** column name */
@@ -9155,7 +9580,9 @@ export enum Inventory_Products_Update_Column {
 export type Inventory_Products_Var_Pop_Fields = {
   __typename?: 'inventory_products_var_pop_fields';
   custom_loyalty_value?: Maybe<Scalars['Float']>;
+  hub_stock?: Maybe<Scalars['Float']>;
   loyalty_value?: Maybe<Scalars['Float']>;
+  reserved_stock?: Maybe<Scalars['Float']>;
   stock_available?: Maybe<Scalars['Float']>;
   ttc_price?: Maybe<Scalars['Float']>;
 };
@@ -9163,7 +9590,9 @@ export type Inventory_Products_Var_Pop_Fields = {
 /** order by var_pop() on columns of table "inventory_products" */
 export type Inventory_Products_Var_Pop_Order_By = {
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
 };
@@ -9172,7 +9601,9 @@ export type Inventory_Products_Var_Pop_Order_By = {
 export type Inventory_Products_Var_Samp_Fields = {
   __typename?: 'inventory_products_var_samp_fields';
   custom_loyalty_value?: Maybe<Scalars['Float']>;
+  hub_stock?: Maybe<Scalars['Float']>;
   loyalty_value?: Maybe<Scalars['Float']>;
+  reserved_stock?: Maybe<Scalars['Float']>;
   stock_available?: Maybe<Scalars['Float']>;
   ttc_price?: Maybe<Scalars['Float']>;
 };
@@ -9180,7 +9611,9 @@ export type Inventory_Products_Var_Samp_Fields = {
 /** order by var_samp() on columns of table "inventory_products" */
 export type Inventory_Products_Var_Samp_Order_By = {
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
 };
@@ -9189,7 +9622,9 @@ export type Inventory_Products_Var_Samp_Order_By = {
 export type Inventory_Products_Variance_Fields = {
   __typename?: 'inventory_products_variance_fields';
   custom_loyalty_value?: Maybe<Scalars['Float']>;
+  hub_stock?: Maybe<Scalars['Float']>;
   loyalty_value?: Maybe<Scalars['Float']>;
+  reserved_stock?: Maybe<Scalars['Float']>;
   stock_available?: Maybe<Scalars['Float']>;
   ttc_price?: Maybe<Scalars['Float']>;
 };
@@ -9197,7 +9632,9 @@ export type Inventory_Products_Variance_Fields = {
 /** order by variance() on columns of table "inventory_products" */
 export type Inventory_Products_Variance_Order_By = {
   custom_loyalty_value?: Maybe<Order_By>;
+  hub_stock?: Maybe<Order_By>;
   loyalty_value?: Maybe<Order_By>;
+  reserved_stock?: Maybe<Order_By>;
   stock_available?: Maybe<Order_By>;
   ttc_price?: Maybe<Order_By>;
 };
@@ -9834,6 +10271,10 @@ export type Mutation_Root = {
   delete_banners?: Maybe<Banners_Mutation_Response>;
   /** delete single row from the table: "banners" */
   delete_banners_by_pk?: Maybe<Banners>;
+  /** delete data from the table: "banners_warehouses" */
+  delete_banners_warehouses?: Maybe<Banners_Warehouses_Mutation_Response>;
+  /** delete single row from the table: "banners_warehouses" */
+  delete_banners_warehouses_by_pk?: Maybe<Banners_Warehouses>;
   /** delete data from the table: "batches" */
   delete_batches?: Maybe<Batches_Mutation_Response>;
   /** delete single row from the table: "batches" */
@@ -9986,6 +10427,10 @@ export type Mutation_Root = {
   delete_loyalty_event_reason?: Maybe<Loyalty_Event_Reason_Mutation_Response>;
   /** delete single row from the table: "loyalty_event_reason" */
   delete_loyalty_event_reason_by_pk?: Maybe<Loyalty_Event_Reason>;
+  /** delete data from the table: "nutriscores" */
+  delete_nutriscores?: Maybe<Nutriscores_Mutation_Response>;
+  /** delete single row from the table: "nutriscores" */
+  delete_nutriscores_by_pk?: Maybe<Nutriscores>;
   /** delete data from the table: "operation_rule_handle" */
   delete_operation_rule_handle?: Maybe<Operation_Rule_Handle_Mutation_Response>;
   /** delete single row from the table: "operation_rule_handle" */
@@ -10038,6 +10483,14 @@ export type Mutation_Root = {
   delete_products?: Maybe<Products_Mutation_Response>;
   /** delete single row from the table: "products" */
   delete_products_by_pk?: Maybe<Products>;
+  /** delete data from the table: "rider_event_type" */
+  delete_rider_event_type?: Maybe<Rider_Event_Type_Mutation_Response>;
+  /** delete single row from the table: "rider_event_type" */
+  delete_rider_event_type_by_pk?: Maybe<Rider_Event_Type>;
+  /** delete data from the table: "rider_events" */
+  delete_rider_events?: Maybe<Rider_Events_Mutation_Response>;
+  /** delete single row from the table: "rider_events" */
+  delete_rider_events_by_pk?: Maybe<Rider_Events>;
   /** delete data from the table: "rider_push_notification_tokens" */
   delete_rider_push_notification_tokens?: Maybe<Rider_Push_Notification_Tokens_Mutation_Response>;
   /** delete single row from the table: "rider_push_notification_tokens" */
@@ -10130,6 +10583,10 @@ export type Mutation_Root = {
   delete_transports?: Maybe<Transports_Mutation_Response>;
   /** delete single row from the table: "transports" */
   delete_transports_by_pk?: Maybe<Transports>;
+  /** delete data from the table: "uber_orders_missing_items" */
+  delete_uber_orders_missing_items?: Maybe<Uber_Orders_Missing_Items_Mutation_Response>;
+  /** delete single row from the table: "uber_orders_missing_items" */
+  delete_uber_orders_missing_items_by_pk?: Maybe<Uber_Orders_Missing_Items>;
   /** delete data from the table: "user_addresses" */
   delete_user_addresses?: Maybe<User_Addresses_Mutation_Response>;
   /** delete single row from the table: "user_addresses" */
@@ -10223,6 +10680,10 @@ export type Mutation_Root = {
   insert_banners?: Maybe<Banners_Mutation_Response>;
   /** insert a single row into the table: "banners" */
   insert_banners_one?: Maybe<Banners>;
+  /** insert data into the table: "banners_warehouses" */
+  insert_banners_warehouses?: Maybe<Banners_Warehouses_Mutation_Response>;
+  /** insert a single row into the table: "banners_warehouses" */
+  insert_banners_warehouses_one?: Maybe<Banners_Warehouses>;
   /** insert data into the table: "batches" */
   insert_batches?: Maybe<Batches_Mutation_Response>;
   /** insert a single row into the table: "batches" */
@@ -10375,6 +10836,10 @@ export type Mutation_Root = {
   insert_loyalty_event_reason?: Maybe<Loyalty_Event_Reason_Mutation_Response>;
   /** insert a single row into the table: "loyalty_event_reason" */
   insert_loyalty_event_reason_one?: Maybe<Loyalty_Event_Reason>;
+  /** insert data into the table: "nutriscores" */
+  insert_nutriscores?: Maybe<Nutriscores_Mutation_Response>;
+  /** insert a single row into the table: "nutriscores" */
+  insert_nutriscores_one?: Maybe<Nutriscores>;
   /** insert data into the table: "operation_rule_handle" */
   insert_operation_rule_handle?: Maybe<Operation_Rule_Handle_Mutation_Response>;
   /** insert a single row into the table: "operation_rule_handle" */
@@ -10427,6 +10892,14 @@ export type Mutation_Root = {
   insert_products?: Maybe<Products_Mutation_Response>;
   /** insert a single row into the table: "products" */
   insert_products_one?: Maybe<Products>;
+  /** insert data into the table: "rider_event_type" */
+  insert_rider_event_type?: Maybe<Rider_Event_Type_Mutation_Response>;
+  /** insert a single row into the table: "rider_event_type" */
+  insert_rider_event_type_one?: Maybe<Rider_Event_Type>;
+  /** insert data into the table: "rider_events" */
+  insert_rider_events?: Maybe<Rider_Events_Mutation_Response>;
+  /** insert a single row into the table: "rider_events" */
+  insert_rider_events_one?: Maybe<Rider_Events>;
   /** insert data into the table: "rider_push_notification_tokens" */
   insert_rider_push_notification_tokens?: Maybe<Rider_Push_Notification_Tokens_Mutation_Response>;
   /** insert a single row into the table: "rider_push_notification_tokens" */
@@ -10519,6 +10992,10 @@ export type Mutation_Root = {
   insert_transports?: Maybe<Transports_Mutation_Response>;
   /** insert a single row into the table: "transports" */
   insert_transports_one?: Maybe<Transports>;
+  /** insert data into the table: "uber_orders_missing_items" */
+  insert_uber_orders_missing_items?: Maybe<Uber_Orders_Missing_Items_Mutation_Response>;
+  /** insert a single row into the table: "uber_orders_missing_items" */
+  insert_uber_orders_missing_items_one?: Maybe<Uber_Orders_Missing_Items>;
   /** insert data into the table: "user_addresses" */
   insert_user_addresses?: Maybe<User_Addresses_Mutation_Response>;
   /** insert a single row into the table: "user_addresses" */
@@ -10593,12 +11070,14 @@ export type Mutation_Root = {
   insert_zone_one?: Maybe<Zone>;
   login?: Maybe<LoginOutput>;
   markOrderAsDelivered?: Maybe<MarkOrderAsDeliveredOutput>;
+  markOrderAsToReassign?: Maybe<MarkOrderAsToReassignOutput>;
   orderCoursierFr?: Maybe<OrderOutputCoursier>;
   orderPayment?: Maybe<OrderOutput>;
   orderStuart?: Maybe<OrderStuartOutput>;
   pickupAssignedOrder?: Maybe<PickupAssignedOrderOutput>;
   refreshToken?: Maybe<AdminLoginOutput>;
   refundOrder?: Maybe<RefundOrderOutput>;
+  refundOrderComplete?: Maybe<RefundOrderCompleteOutput>;
   riderChallenge?: Maybe<RiderChallengeOutput>;
   riderLogin?: Maybe<RiderLoginOutput>;
   runTms?: Maybe<RunTmsOutput>;
@@ -10611,6 +11090,9 @@ export type Mutation_Root = {
   syncUberStores?: Maybe<SyncUberStoresOutput>;
   updateAdminPassword?: Maybe<UpdateAdminPasswordOutput>;
   updateRiderLocation?: Maybe<UpdateRiderLocationOutput>;
+  updateRiderStatus?: Maybe<UpdateRiderStatusOutput>;
+  updateRiderTransportMode?: Maybe<UpdateRiderTransportModeOutput>;
+  updateRiderWarehouse?: Maybe<UpdateRiderWarehouseOutput>;
   /** update data of the table: "actions_last_result" */
   update_actions_last_result?: Maybe<Actions_Last_Result_Mutation_Response>;
   /** update single row of the table: "actions_last_result" */
@@ -10631,6 +11113,10 @@ export type Mutation_Root = {
   update_banners?: Maybe<Banners_Mutation_Response>;
   /** update single row of the table: "banners" */
   update_banners_by_pk?: Maybe<Banners>;
+  /** update data of the table: "banners_warehouses" */
+  update_banners_warehouses?: Maybe<Banners_Warehouses_Mutation_Response>;
+  /** update single row of the table: "banners_warehouses" */
+  update_banners_warehouses_by_pk?: Maybe<Banners_Warehouses>;
   /** update data of the table: "batches" */
   update_batches?: Maybe<Batches_Mutation_Response>;
   /** update single row of the table: "batches" */
@@ -10783,6 +11269,10 @@ export type Mutation_Root = {
   update_loyalty_event_reason?: Maybe<Loyalty_Event_Reason_Mutation_Response>;
   /** update single row of the table: "loyalty_event_reason" */
   update_loyalty_event_reason_by_pk?: Maybe<Loyalty_Event_Reason>;
+  /** update data of the table: "nutriscores" */
+  update_nutriscores?: Maybe<Nutriscores_Mutation_Response>;
+  /** update single row of the table: "nutriscores" */
+  update_nutriscores_by_pk?: Maybe<Nutriscores>;
   /** update data of the table: "operation_rule_handle" */
   update_operation_rule_handle?: Maybe<Operation_Rule_Handle_Mutation_Response>;
   /** update single row of the table: "operation_rule_handle" */
@@ -10835,6 +11325,14 @@ export type Mutation_Root = {
   update_products?: Maybe<Products_Mutation_Response>;
   /** update single row of the table: "products" */
   update_products_by_pk?: Maybe<Products>;
+  /** update data of the table: "rider_event_type" */
+  update_rider_event_type?: Maybe<Rider_Event_Type_Mutation_Response>;
+  /** update single row of the table: "rider_event_type" */
+  update_rider_event_type_by_pk?: Maybe<Rider_Event_Type>;
+  /** update data of the table: "rider_events" */
+  update_rider_events?: Maybe<Rider_Events_Mutation_Response>;
+  /** update single row of the table: "rider_events" */
+  update_rider_events_by_pk?: Maybe<Rider_Events>;
   /** update data of the table: "rider_push_notification_tokens" */
   update_rider_push_notification_tokens?: Maybe<Rider_Push_Notification_Tokens_Mutation_Response>;
   /** update single row of the table: "rider_push_notification_tokens" */
@@ -10927,6 +11425,10 @@ export type Mutation_Root = {
   update_transports?: Maybe<Transports_Mutation_Response>;
   /** update single row of the table: "transports" */
   update_transports_by_pk?: Maybe<Transports>;
+  /** update data of the table: "uber_orders_missing_items" */
+  update_uber_orders_missing_items?: Maybe<Uber_Orders_Missing_Items_Mutation_Response>;
+  /** update single row of the table: "uber_orders_missing_items" */
+  update_uber_orders_missing_items_by_pk?: Maybe<Uber_Orders_Missing_Items>;
   /** update data of the table: "user_addresses" */
   update_user_addresses?: Maybe<User_Addresses_Mutation_Response>;
   /** update single row of the table: "user_addresses" */
@@ -11155,6 +11657,18 @@ export type Mutation_RootDelete_BannersArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Banners_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Banners_WarehousesArgs = {
+  where: Banners_Warehouses_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Banners_Warehouses_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -11627,6 +12141,18 @@ export type Mutation_RootDelete_Loyalty_Event_Reason_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_NutriscoresArgs = {
+  where: Nutriscores_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Nutriscores_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_Operation_Rule_HandleArgs = {
   where: Operation_Rule_Handle_Bool_Exp;
 };
@@ -11780,6 +12306,30 @@ export type Mutation_RootDelete_ProductsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Products_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Rider_Event_TypeArgs = {
+  where: Rider_Event_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Rider_Event_Type_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Rider_EventsArgs = {
+  where: Rider_Events_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Rider_Events_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -12069,6 +12619,18 @@ export type Mutation_RootDelete_Transports_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Uber_Orders_Missing_ItemsArgs = {
+  where: Uber_Orders_Missing_Items_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Uber_Orders_Missing_Items_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_User_AddressesArgs = {
   where: User_Addresses_Bool_Exp;
 };
@@ -12295,7 +12857,7 @@ export type Mutation_RootDetachPaymentMethodArgs = {
 
 /** mutation root */
 export type Mutation_RootGetCarrefourOrdersArgs = {
-  warehousesId?: Maybe<Array<Scalars['uuid']>>;
+  warehousesHandle?: Maybe<Array<Scalars['String']>>;
 };
 
 
@@ -12373,6 +12935,20 @@ export type Mutation_RootInsert_BannersArgs = {
 export type Mutation_RootInsert_Banners_OneArgs = {
   object: Banners_Insert_Input;
   on_conflict?: Maybe<Banners_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Banners_WarehousesArgs = {
+  objects: Array<Banners_Warehouses_Insert_Input>;
+  on_conflict?: Maybe<Banners_Warehouses_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Banners_Warehouses_OneArgs = {
+  object: Banners_Warehouses_Insert_Input;
+  on_conflict?: Maybe<Banners_Warehouses_On_Conflict>;
 };
 
 
@@ -12909,6 +13485,20 @@ export type Mutation_RootInsert_Loyalty_Event_Reason_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_NutriscoresArgs = {
+  objects: Array<Nutriscores_Insert_Input>;
+  on_conflict?: Maybe<Nutriscores_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Nutriscores_OneArgs = {
+  object: Nutriscores_Insert_Input;
+  on_conflict?: Maybe<Nutriscores_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Operation_Rule_HandleArgs = {
   objects: Array<Operation_Rule_Handle_Insert_Input>;
   on_conflict?: Maybe<Operation_Rule_Handle_On_Conflict>;
@@ -13087,6 +13677,34 @@ export type Mutation_RootInsert_ProductsArgs = {
 export type Mutation_RootInsert_Products_OneArgs = {
   object: Products_Insert_Input;
   on_conflict?: Maybe<Products_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Rider_Event_TypeArgs = {
+  objects: Array<Rider_Event_Type_Insert_Input>;
+  on_conflict?: Maybe<Rider_Event_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Rider_Event_Type_OneArgs = {
+  object: Rider_Event_Type_Insert_Input;
+  on_conflict?: Maybe<Rider_Event_Type_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Rider_EventsArgs = {
+  objects: Array<Rider_Events_Insert_Input>;
+  on_conflict?: Maybe<Rider_Events_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Rider_Events_OneArgs = {
+  object: Rider_Events_Insert_Input;
+  on_conflict?: Maybe<Rider_Events_On_Conflict>;
 };
 
 
@@ -13413,6 +14031,20 @@ export type Mutation_RootInsert_Transports_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Uber_Orders_Missing_ItemsArgs = {
+  objects: Array<Uber_Orders_Missing_Items_Insert_Input>;
+  on_conflict?: Maybe<Uber_Orders_Missing_Items_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Uber_Orders_Missing_Items_OneArgs = {
+  object: Uber_Orders_Missing_Items_Insert_Input;
+  on_conflict?: Maybe<Uber_Orders_Missing_Items_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_User_AddressesArgs = {
   objects: Array<User_Addresses_Insert_Input>;
   on_conflict?: Maybe<User_Addresses_On_Conflict>;
@@ -13676,6 +14308,12 @@ export type Mutation_RootMarkOrderAsDeliveredArgs = {
 
 
 /** mutation root */
+export type Mutation_RootMarkOrderAsToReassignArgs = {
+  orderId: Scalars['String'];
+};
+
+
+/** mutation root */
 export type Mutation_RootOrderCoursierFrArgs = {
   order: OrderBodyCoursier;
 };
@@ -13716,6 +14354,18 @@ export type Mutation_RootRefundOrderArgs = {
   orderId: Scalars['String'];
   reason?: Maybe<Scalars['String']>;
   refundedProductIds?: Maybe<Array<Maybe<Scalars['uuid']>>>;
+};
+
+
+/** mutation root */
+export type Mutation_RootRefundOrderCompleteArgs = {
+  couponRefused?: Maybe<Scalars['Boolean']>;
+  custom: Scalars['Float'];
+  delivery: Scalars['Float'];
+  orderNumber: Scalars['Int'];
+  reason?: Maybe<Scalars['String']>;
+  refundedProducts: Array<RefundedProduct>;
+  tips: Scalars['Float'];
 };
 
 
@@ -13786,6 +14436,27 @@ export type Mutation_RootUpdateAdminPasswordArgs = {
 export type Mutation_RootUpdateRiderLocationArgs = {
   latitude: Scalars['Float'];
   longitude: Scalars['Float'];
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateRiderStatusArgs = {
+  rider_id: Scalars['uuid'];
+  status: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateRiderTransportModeArgs = {
+  rider_id: Scalars['uuid'];
+  transport_mode: Scalars['String'];
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdateRiderWarehouseArgs = {
+  rider_id: Scalars['uuid'];
+  warehouse_id: Scalars['uuid'];
 };
 
 
@@ -13870,6 +14541,20 @@ export type Mutation_RootUpdate_Banners_By_PkArgs = {
   _inc?: Maybe<Banners_Inc_Input>;
   _set?: Maybe<Banners_Set_Input>;
   pk_columns: Banners_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Banners_WarehousesArgs = {
+  _set?: Maybe<Banners_Warehouses_Set_Input>;
+  where: Banners_Warehouses_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Banners_Warehouses_By_PkArgs = {
+  _set?: Maybe<Banners_Warehouses_Set_Input>;
+  pk_columns: Banners_Warehouses_Pk_Columns_Input;
 };
 
 
@@ -14444,6 +15129,20 @@ export type Mutation_RootUpdate_Loyalty_Event_Reason_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_NutriscoresArgs = {
+  _set?: Maybe<Nutriscores_Set_Input>;
+  where: Nutriscores_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Nutriscores_By_PkArgs = {
+  _set?: Maybe<Nutriscores_Set_Input>;
+  pk_columns: Nutriscores_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Operation_Rule_HandleArgs = {
   _set?: Maybe<Operation_Rule_Handle_Set_Input>;
   where: Operation_Rule_Handle_Bool_Exp;
@@ -14632,6 +15331,34 @@ export type Mutation_RootUpdate_Products_By_PkArgs = {
   _inc?: Maybe<Products_Inc_Input>;
   _set?: Maybe<Products_Set_Input>;
   pk_columns: Products_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Rider_Event_TypeArgs = {
+  _set?: Maybe<Rider_Event_Type_Set_Input>;
+  where: Rider_Event_Type_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Rider_Event_Type_By_PkArgs = {
+  _set?: Maybe<Rider_Event_Type_Set_Input>;
+  pk_columns: Rider_Event_Type_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Rider_EventsArgs = {
+  _set?: Maybe<Rider_Events_Set_Input>;
+  where: Rider_Events_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Rider_Events_By_PkArgs = {
+  _set?: Maybe<Rider_Events_Set_Input>;
+  pk_columns: Rider_Events_Pk_Columns_Input;
 };
 
 
@@ -14974,6 +15701,22 @@ export type Mutation_RootUpdate_Transports_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Uber_Orders_Missing_ItemsArgs = {
+  _inc?: Maybe<Uber_Orders_Missing_Items_Inc_Input>;
+  _set?: Maybe<Uber_Orders_Missing_Items_Set_Input>;
+  where: Uber_Orders_Missing_Items_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Uber_Orders_Missing_Items_By_PkArgs = {
+  _inc?: Maybe<Uber_Orders_Missing_Items_Inc_Input>;
+  _set?: Maybe<Uber_Orders_Missing_Items_Set_Input>;
+  pk_columns: Uber_Orders_Missing_Items_Pk_Columns_Input;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_User_AddressesArgs = {
   _inc?: Maybe<User_Addresses_Inc_Input>;
   _set?: Maybe<User_Addresses_Set_Input>;
@@ -15263,6 +16006,125 @@ export type Numeric_Comparison_Exp = {
   _neq?: Maybe<Scalars['numeric']>;
   _nin?: Maybe<Array<Scalars['numeric']>>;
 };
+
+/** columns and relationships of "nutriscores" */
+export type Nutriscores = {
+  __typename?: 'nutriscores';
+  value: Scalars['String'];
+};
+
+/** aggregated selection of "nutriscores" */
+export type Nutriscores_Aggregate = {
+  __typename?: 'nutriscores_aggregate';
+  aggregate?: Maybe<Nutriscores_Aggregate_Fields>;
+  nodes: Array<Nutriscores>;
+};
+
+/** aggregate fields of "nutriscores" */
+export type Nutriscores_Aggregate_Fields = {
+  __typename?: 'nutriscores_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Nutriscores_Max_Fields>;
+  min?: Maybe<Nutriscores_Min_Fields>;
+};
+
+
+/** aggregate fields of "nutriscores" */
+export type Nutriscores_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Nutriscores_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "nutriscores". All fields are combined with a logical 'AND'. */
+export type Nutriscores_Bool_Exp = {
+  _and?: Maybe<Array<Nutriscores_Bool_Exp>>;
+  _not?: Maybe<Nutriscores_Bool_Exp>;
+  _or?: Maybe<Array<Nutriscores_Bool_Exp>>;
+  value?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "nutriscores" */
+export enum Nutriscores_Constraint {
+  /** unique or primary key constraint */
+  NutriscoresPkey = 'nutriscores_pkey'
+}
+
+export enum Nutriscores_Enum {
+  A = 'a',
+  B = 'b',
+  C = 'c',
+  D = 'd',
+  E = 'e'
+}
+
+/** Boolean expression to compare columns of type "nutriscores_enum". All fields are combined with logical 'AND'. */
+export type Nutriscores_Enum_Comparison_Exp = {
+  _eq?: Maybe<Nutriscores_Enum>;
+  _in?: Maybe<Array<Nutriscores_Enum>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _neq?: Maybe<Nutriscores_Enum>;
+  _nin?: Maybe<Array<Nutriscores_Enum>>;
+};
+
+/** input type for inserting data into table "nutriscores" */
+export type Nutriscores_Insert_Input = {
+  value?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Nutriscores_Max_Fields = {
+  __typename?: 'nutriscores_max_fields';
+  value?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Nutriscores_Min_Fields = {
+  __typename?: 'nutriscores_min_fields';
+  value?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "nutriscores" */
+export type Nutriscores_Mutation_Response = {
+  __typename?: 'nutriscores_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Nutriscores>;
+};
+
+/** on conflict condition type for table "nutriscores" */
+export type Nutriscores_On_Conflict = {
+  constraint: Nutriscores_Constraint;
+  update_columns?: Array<Nutriscores_Update_Column>;
+  where?: Maybe<Nutriscores_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "nutriscores". */
+export type Nutriscores_Order_By = {
+  value?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: nutriscores */
+export type Nutriscores_Pk_Columns_Input = {
+  value: Scalars['String'];
+};
+
+/** select columns of table "nutriscores" */
+export enum Nutriscores_Select_Column {
+  /** column name */
+  Value = 'value'
+}
+
+/** input type for updating data in table "nutriscores" */
+export type Nutriscores_Set_Input = {
+  value?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "nutriscores" */
+export enum Nutriscores_Update_Column {
+  /** column name */
+  Value = 'value'
+}
 
 /** columns and relationships of "operation_rule_handle" */
 export type Operation_Rule_Handle = {
@@ -17489,6 +18351,7 @@ export type Popular_Searches = {
   id: Scalars['uuid'];
   name: Scalars['String'];
   order: Scalars['Int'];
+  zone: Zone_Enum;
 };
 
 /** aggregated selection of "popular_searches" */
@@ -17535,6 +18398,7 @@ export type Popular_Searches_Bool_Exp = {
   id?: Maybe<Uuid_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
   order?: Maybe<Int_Comparison_Exp>;
+  zone?: Maybe<Zone_Enum_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "popular_searches" */
@@ -17553,6 +18417,7 @@ export type Popular_Searches_Insert_Input = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   order?: Maybe<Scalars['Int']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate max on columns */
@@ -17592,6 +18457,7 @@ export type Popular_Searches_Order_By = {
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
   order?: Maybe<Order_By>;
+  zone?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: popular_searches */
@@ -17606,7 +18472,9 @@ export enum Popular_Searches_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  Order = 'order'
+  Order = 'order',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** input type for updating data in table "popular_searches" */
@@ -17614,6 +18482,7 @@ export type Popular_Searches_Set_Input = {
   id?: Maybe<Scalars['uuid']>;
   name?: Maybe<Scalars['String']>;
   order?: Maybe<Scalars['Int']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate stddev on columns */
@@ -17647,7 +18516,9 @@ export enum Popular_Searches_Update_Column {
   /** column name */
   Name = 'name',
   /** column name */
-  Order = 'order'
+  Order = 'order',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** aggregate var_pop on columns */
@@ -18448,6 +19319,7 @@ export type Products = {
   is_coupon_eligible: Scalars['Boolean'];
   keywords?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  nutriscore?: Maybe<Nutriscores_Enum>;
   /** An array relationship */
   order_items: Array<Order_Items>;
   /** An aggregate relationship */
@@ -18680,6 +19552,7 @@ export type Products_Bool_Exp = {
   is_coupon_eligible?: Maybe<Boolean_Comparison_Exp>;
   keywords?: Maybe<String_Comparison_Exp>;
   name?: Maybe<String_Comparison_Exp>;
+  nutriscore?: Maybe<Nutriscores_Enum_Comparison_Exp>;
   order_items?: Maybe<Order_Items_Bool_Exp>;
   parent_sku?: Maybe<String_Comparison_Exp>;
   picture?: Maybe<String_Comparison_Exp>;
@@ -18728,6 +19601,7 @@ export type Products_Insert_Input = {
   is_coupon_eligible?: Maybe<Scalars['Boolean']>;
   keywords?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  nutriscore?: Maybe<Nutriscores_Enum>;
   order_items?: Maybe<Order_Items_Arr_Rel_Insert_Input>;
   parent_sku?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
@@ -18831,6 +19705,7 @@ export type Products_Order_By = {
   is_coupon_eligible?: Maybe<Order_By>;
   keywords?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
+  nutriscore?: Maybe<Order_By>;
   order_items_aggregate?: Maybe<Order_Items_Aggregate_Order_By>;
   parent_sku?: Maybe<Order_By>;
   picture?: Maybe<Order_By>;
@@ -18884,6 +19759,8 @@ export enum Products_Select_Column {
   /** column name */
   Name = 'name',
   /** column name */
+  Nutriscore = 'nutriscore',
+  /** column name */
   ParentSku = 'parent_sku',
   /** column name */
   Picture = 'picture',
@@ -18919,6 +19796,7 @@ export type Products_Set_Input = {
   is_coupon_eligible?: Maybe<Scalars['Boolean']>;
   keywords?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  nutriscore?: Maybe<Nutriscores_Enum>;
   parent_sku?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
   picture_blurhash?: Maybe<Scalars['String']>;
@@ -18988,6 +19866,8 @@ export enum Products_Update_Column {
   Keywords = 'keywords',
   /** column name */
   Name = 'name',
+  /** column name */
+  Nutriscore = 'nutriscore',
   /** column name */
   ParentSku = 'parent_sku',
   /** column name */
@@ -19061,6 +19941,12 @@ export type Query_Root = {
   banners_aggregate: Banners_Aggregate;
   /** fetch data from the table: "banners" using primary key columns */
   banners_by_pk?: Maybe<Banners>;
+  /** An array relationship */
+  banners_warehouses: Array<Banners_Warehouses>;
+  /** An aggregate relationship */
+  banners_warehouses_aggregate: Banners_Warehouses_Aggregate;
+  /** fetch data from the table: "banners_warehouses" using primary key columns */
+  banners_warehouses_by_pk?: Maybe<Banners_Warehouses>;
   /** fetch data from the table: "batches" */
   batches: Array<Batches>;
   /** fetch aggregated fields from the table: "batches" */
@@ -19097,6 +19983,7 @@ export type Query_Root = {
   categories_aggregate: Categories_Aggregate;
   /** fetch data from the table: "categories" using primary key columns */
   categories_by_pk?: Maybe<Categories>;
+  checkCoupon?: Maybe<CheckCouponOutput>;
   /** fetch data from the table: "consent_type" */
   consent_type: Array<Consent_Type>;
   /** fetch aggregated fields from the table: "consent_type" */
@@ -19291,6 +20178,12 @@ export type Query_Root = {
   loyalty_event_reason_aggregate: Loyalty_Event_Reason_Aggregate;
   /** fetch data from the table: "loyalty_event_reason" using primary key columns */
   loyalty_event_reason_by_pk?: Maybe<Loyalty_Event_Reason>;
+  /** fetch data from the table: "nutriscores" */
+  nutriscores: Array<Nutriscores>;
+  /** fetch aggregated fields from the table: "nutriscores" */
+  nutriscores_aggregate: Nutriscores_Aggregate;
+  /** fetch data from the table: "nutriscores" using primary key columns */
+  nutriscores_by_pk?: Maybe<Nutriscores>;
   /** fetch data from the table: "operation_rule_handle" */
   operation_rule_handle: Array<Operation_Rule_Handle>;
   /** fetch aggregated fields from the table: "operation_rule_handle" */
@@ -19339,6 +20232,7 @@ export type Query_Root = {
   popular_searches_aggregate: Popular_Searches_Aggregate;
   /** fetch data from the table: "popular_searches" using primary key columns */
   popular_searches_by_pk?: Maybe<Popular_Searches>;
+  preview_refund?: Maybe<PreviewRefund>;
   /** An array relationship */
   product_properties: Array<Product_Properties>;
   /** An aggregate relationship */
@@ -19369,6 +20263,19 @@ export type Query_Root = {
   products_aggregate: Products_Aggregate;
   /** fetch data from the table: "products" using primary key columns */
   products_by_pk?: Maybe<Products>;
+  refund_reason: Array<RefundReason>;
+  /** fetch data from the table: "rider_event_type" */
+  rider_event_type: Array<Rider_Event_Type>;
+  /** fetch aggregated fields from the table: "rider_event_type" */
+  rider_event_type_aggregate: Rider_Event_Type_Aggregate;
+  /** fetch data from the table: "rider_event_type" using primary key columns */
+  rider_event_type_by_pk?: Maybe<Rider_Event_Type>;
+  /** fetch data from the table: "rider_events" */
+  rider_events: Array<Rider_Events>;
+  /** fetch aggregated fields from the table: "rider_events" */
+  rider_events_aggregate: Rider_Events_Aggregate;
+  /** fetch data from the table: "rider_events" using primary key columns */
+  rider_events_by_pk?: Maybe<Rider_Events>;
   /** fetch data from the table: "rider_push_notification_tokens" */
   rider_push_notification_tokens: Array<Rider_Push_Notification_Tokens>;
   /** fetch aggregated fields from the table: "rider_push_notification_tokens" */
@@ -19512,6 +20419,12 @@ export type Query_Root = {
   transports_aggregate: Transports_Aggregate;
   /** fetch data from the table: "transports" using primary key columns */
   transports_by_pk?: Maybe<Transports>;
+  /** fetch data from the table: "uber_orders_missing_items" */
+  uber_orders_missing_items: Array<Uber_Orders_Missing_Items>;
+  /** fetch aggregated fields from the table: "uber_orders_missing_items" */
+  uber_orders_missing_items_aggregate: Uber_Orders_Missing_Items_Aggregate;
+  /** fetch data from the table: "uber_orders_missing_items" using primary key columns */
+  uber_orders_missing_items_by_pk?: Maybe<Uber_Orders_Missing_Items>;
   userCoupons?: Maybe<Array<CouponWithValidity>>;
   /** An array relationship */
   user_addresses: Array<User_Addresses>;
@@ -19738,6 +20651,29 @@ export type Query_RootBanners_By_PkArgs = {
 };
 
 
+export type Query_RootBanners_WarehousesArgs = {
+  distinct_on?: Maybe<Array<Banners_Warehouses_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Banners_Warehouses_Order_By>>;
+  where?: Maybe<Banners_Warehouses_Bool_Exp>;
+};
+
+
+export type Query_RootBanners_Warehouses_AggregateArgs = {
+  distinct_on?: Maybe<Array<Banners_Warehouses_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Banners_Warehouses_Order_By>>;
+  where?: Maybe<Banners_Warehouses_Bool_Exp>;
+};
+
+
+export type Query_RootBanners_Warehouses_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootBatchesArgs = {
   distinct_on?: Maybe<Array<Batches_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -19875,6 +20811,13 @@ export type Query_RootCategories_AggregateArgs = {
 
 export type Query_RootCategories_By_PkArgs = {
   id: Scalars['uuid'];
+};
+
+
+export type Query_RootCheckCouponArgs = {
+  basket?: Maybe<Array<CartItemWithQuantityInput>>;
+  code: Scalars['String'];
+  warehouse_id?: Maybe<Scalars['uuid']>;
 };
 
 
@@ -20637,6 +21580,29 @@ export type Query_RootLoyalty_Event_Reason_By_PkArgs = {
 };
 
 
+export type Query_RootNutriscoresArgs = {
+  distinct_on?: Maybe<Array<Nutriscores_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Nutriscores_Order_By>>;
+  where?: Maybe<Nutriscores_Bool_Exp>;
+};
+
+
+export type Query_RootNutriscores_AggregateArgs = {
+  distinct_on?: Maybe<Array<Nutriscores_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Nutriscores_Order_By>>;
+  where?: Maybe<Nutriscores_Bool_Exp>;
+};
+
+
+export type Query_RootNutriscores_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
 export type Query_RootOperation_Rule_HandleArgs = {
   distinct_on?: Maybe<Array<Operation_Rule_Handle_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -20821,6 +21787,15 @@ export type Query_RootPopular_Searches_By_PkArgs = {
 };
 
 
+export type Query_RootPreview_RefundArgs = {
+  custom: Scalars['Float'];
+  delivery: Scalars['Float'];
+  orderNumber: Scalars['Int'];
+  refundedProducts: Array<RefundedProduct>;
+  tips: Scalars['Float'];
+};
+
+
 export type Query_RootProduct_PropertiesArgs = {
   distinct_on?: Maybe<Array<Product_Properties_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -20934,6 +21909,52 @@ export type Query_RootProducts_AggregateArgs = {
 
 
 export type Query_RootProducts_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Query_RootRider_Event_TypeArgs = {
+  distinct_on?: Maybe<Array<Rider_Event_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Rider_Event_Type_Order_By>>;
+  where?: Maybe<Rider_Event_Type_Bool_Exp>;
+};
+
+
+export type Query_RootRider_Event_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Rider_Event_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Rider_Event_Type_Order_By>>;
+  where?: Maybe<Rider_Event_Type_Bool_Exp>;
+};
+
+
+export type Query_RootRider_Event_Type_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+export type Query_RootRider_EventsArgs = {
+  distinct_on?: Maybe<Array<Rider_Events_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Rider_Events_Order_By>>;
+  where?: Maybe<Rider_Events_Bool_Exp>;
+};
+
+
+export type Query_RootRider_Events_AggregateArgs = {
+  distinct_on?: Maybe<Array<Rider_Events_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Rider_Events_Order_By>>;
+  where?: Maybe<Rider_Events_Bool_Exp>;
+};
+
+
+export type Query_RootRider_Events_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -21500,6 +22521,29 @@ export type Query_RootTransports_By_PkArgs = {
 };
 
 
+export type Query_RootUber_Orders_Missing_ItemsArgs = {
+  distinct_on?: Maybe<Array<Uber_Orders_Missing_Items_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Uber_Orders_Missing_Items_Order_By>>;
+  where?: Maybe<Uber_Orders_Missing_Items_Bool_Exp>;
+};
+
+
+export type Query_RootUber_Orders_Missing_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Uber_Orders_Missing_Items_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Uber_Orders_Missing_Items_Order_By>>;
+  where?: Maybe<Uber_Orders_Missing_Items_Bool_Exp>;
+};
+
+
+export type Query_RootUber_Orders_Missing_Items_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
 export type Query_RootUser_AddressesArgs = {
   distinct_on?: Maybe<Array<User_Addresses_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -21916,6 +22960,287 @@ export type Query_RootZone_AggregateArgs = {
 export type Query_RootZone_By_PkArgs = {
   value: Scalars['String'];
 };
+
+/** columns and relationships of "rider_event_type" */
+export type Rider_Event_Type = {
+  __typename?: 'rider_event_type';
+  value: Scalars['String'];
+};
+
+/** aggregated selection of "rider_event_type" */
+export type Rider_Event_Type_Aggregate = {
+  __typename?: 'rider_event_type_aggregate';
+  aggregate?: Maybe<Rider_Event_Type_Aggregate_Fields>;
+  nodes: Array<Rider_Event_Type>;
+};
+
+/** aggregate fields of "rider_event_type" */
+export type Rider_Event_Type_Aggregate_Fields = {
+  __typename?: 'rider_event_type_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Rider_Event_Type_Max_Fields>;
+  min?: Maybe<Rider_Event_Type_Min_Fields>;
+};
+
+
+/** aggregate fields of "rider_event_type" */
+export type Rider_Event_Type_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Rider_Event_Type_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "rider_event_type". All fields are combined with a logical 'AND'. */
+export type Rider_Event_Type_Bool_Exp = {
+  _and?: Maybe<Array<Rider_Event_Type_Bool_Exp>>;
+  _not?: Maybe<Rider_Event_Type_Bool_Exp>;
+  _or?: Maybe<Array<Rider_Event_Type_Bool_Exp>>;
+  value?: Maybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "rider_event_type" */
+export enum Rider_Event_Type_Constraint {
+  /** unique or primary key constraint */
+  RiderEventTypePkey = 'rider_event_type_pkey'
+}
+
+export enum Rider_Event_Type_Enum {
+  SignedIn = 'signed_in',
+  SignedOut = 'signed_out',
+  StatusChanged = 'status_changed',
+  TransportModeChanged = 'transport_mode_changed',
+  WarehouseChanged = 'warehouse_changed'
+}
+
+/** Boolean expression to compare columns of type "rider_event_type_enum". All fields are combined with logical 'AND'. */
+export type Rider_Event_Type_Enum_Comparison_Exp = {
+  _eq?: Maybe<Rider_Event_Type_Enum>;
+  _in?: Maybe<Array<Rider_Event_Type_Enum>>;
+  _is_null?: Maybe<Scalars['Boolean']>;
+  _neq?: Maybe<Rider_Event_Type_Enum>;
+  _nin?: Maybe<Array<Rider_Event_Type_Enum>>;
+};
+
+/** input type for inserting data into table "rider_event_type" */
+export type Rider_Event_Type_Insert_Input = {
+  value?: Maybe<Scalars['String']>;
+};
+
+/** aggregate max on columns */
+export type Rider_Event_Type_Max_Fields = {
+  __typename?: 'rider_event_type_max_fields';
+  value?: Maybe<Scalars['String']>;
+};
+
+/** aggregate min on columns */
+export type Rider_Event_Type_Min_Fields = {
+  __typename?: 'rider_event_type_min_fields';
+  value?: Maybe<Scalars['String']>;
+};
+
+/** response of any mutation on the table "rider_event_type" */
+export type Rider_Event_Type_Mutation_Response = {
+  __typename?: 'rider_event_type_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Rider_Event_Type>;
+};
+
+/** on conflict condition type for table "rider_event_type" */
+export type Rider_Event_Type_On_Conflict = {
+  constraint: Rider_Event_Type_Constraint;
+  update_columns?: Array<Rider_Event_Type_Update_Column>;
+  where?: Maybe<Rider_Event_Type_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "rider_event_type". */
+export type Rider_Event_Type_Order_By = {
+  value?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: rider_event_type */
+export type Rider_Event_Type_Pk_Columns_Input = {
+  value: Scalars['String'];
+};
+
+/** select columns of table "rider_event_type" */
+export enum Rider_Event_Type_Select_Column {
+  /** column name */
+  Value = 'value'
+}
+
+/** input type for updating data in table "rider_event_type" */
+export type Rider_Event_Type_Set_Input = {
+  value?: Maybe<Scalars['String']>;
+};
+
+/** update columns of table "rider_event_type" */
+export enum Rider_Event_Type_Update_Column {
+  /** column name */
+  Value = 'value'
+}
+
+/** columns and relationships of "rider_events" */
+export type Rider_Events = {
+  __typename?: 'rider_events';
+  created_at: Scalars['timestamptz'];
+  event_type: Rider_Event_Type_Enum;
+  id: Scalars['uuid'];
+  rider_id: Scalars['uuid'];
+  rider_status?: Maybe<Rider_Status_Enum>;
+  transport_mode?: Maybe<Transport_Mode_Enum>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregated selection of "rider_events" */
+export type Rider_Events_Aggregate = {
+  __typename?: 'rider_events_aggregate';
+  aggregate?: Maybe<Rider_Events_Aggregate_Fields>;
+  nodes: Array<Rider_Events>;
+};
+
+/** aggregate fields of "rider_events" */
+export type Rider_Events_Aggregate_Fields = {
+  __typename?: 'rider_events_aggregate_fields';
+  count: Scalars['Int'];
+  max?: Maybe<Rider_Events_Max_Fields>;
+  min?: Maybe<Rider_Events_Min_Fields>;
+};
+
+
+/** aggregate fields of "rider_events" */
+export type Rider_Events_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Rider_Events_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** Boolean expression to filter rows from the table "rider_events". All fields are combined with a logical 'AND'. */
+export type Rider_Events_Bool_Exp = {
+  _and?: Maybe<Array<Rider_Events_Bool_Exp>>;
+  _not?: Maybe<Rider_Events_Bool_Exp>;
+  _or?: Maybe<Array<Rider_Events_Bool_Exp>>;
+  created_at?: Maybe<Timestamptz_Comparison_Exp>;
+  event_type?: Maybe<Rider_Event_Type_Enum_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  rider_id?: Maybe<Uuid_Comparison_Exp>;
+  rider_status?: Maybe<Rider_Status_Enum_Comparison_Exp>;
+  transport_mode?: Maybe<Transport_Mode_Enum_Comparison_Exp>;
+  warehouse_id?: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "rider_events" */
+export enum Rider_Events_Constraint {
+  /** unique or primary key constraint */
+  RiderEventsPkey = 'rider_events_pkey'
+}
+
+/** input type for inserting data into table "rider_events" */
+export type Rider_Events_Insert_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  event_type?: Maybe<Rider_Event_Type_Enum>;
+  id?: Maybe<Scalars['uuid']>;
+  rider_id?: Maybe<Scalars['uuid']>;
+  rider_status?: Maybe<Rider_Status_Enum>;
+  transport_mode?: Maybe<Transport_Mode_Enum>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Rider_Events_Max_Fields = {
+  __typename?: 'rider_events_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  rider_id?: Maybe<Scalars['uuid']>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Rider_Events_Min_Fields = {
+  __typename?: 'rider_events_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']>;
+  id?: Maybe<Scalars['uuid']>;
+  rider_id?: Maybe<Scalars['uuid']>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "rider_events" */
+export type Rider_Events_Mutation_Response = {
+  __typename?: 'rider_events_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Rider_Events>;
+};
+
+/** on conflict condition type for table "rider_events" */
+export type Rider_Events_On_Conflict = {
+  constraint: Rider_Events_Constraint;
+  update_columns?: Array<Rider_Events_Update_Column>;
+  where?: Maybe<Rider_Events_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "rider_events". */
+export type Rider_Events_Order_By = {
+  created_at?: Maybe<Order_By>;
+  event_type?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  rider_id?: Maybe<Order_By>;
+  rider_status?: Maybe<Order_By>;
+  transport_mode?: Maybe<Order_By>;
+  warehouse_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: rider_events */
+export type Rider_Events_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "rider_events" */
+export enum Rider_Events_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventType = 'event_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  RiderId = 'rider_id',
+  /** column name */
+  RiderStatus = 'rider_status',
+  /** column name */
+  TransportMode = 'transport_mode',
+  /** column name */
+  WarehouseId = 'warehouse_id'
+}
+
+/** input type for updating data in table "rider_events" */
+export type Rider_Events_Set_Input = {
+  created_at?: Maybe<Scalars['timestamptz']>;
+  event_type?: Maybe<Rider_Event_Type_Enum>;
+  id?: Maybe<Scalars['uuid']>;
+  rider_id?: Maybe<Scalars['uuid']>;
+  rider_status?: Maybe<Rider_Status_Enum>;
+  transport_mode?: Maybe<Transport_Mode_Enum>;
+  warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** update columns of table "rider_events" */
+export enum Rider_Events_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  EventType = 'event_type',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  RiderId = 'rider_id',
+  /** column name */
+  RiderStatus = 'rider_status',
+  /** column name */
+  TransportMode = 'transport_mode',
+  /** column name */
+  WarehouseId = 'warehouse_id'
+}
 
 /** columns and relationships of "rider_push_notification_tokens" */
 export type Rider_Push_Notification_Tokens = {
@@ -22891,8 +24216,10 @@ export enum Role_Type_Enum {
   CustomerService = 'customer_service',
   CustomerServiceTemp = 'customer_service_temp',
   Expansion = 'expansion',
+  ExternalIntegrationAssortment = 'external_integration_assortment',
   HubPilot = 'hub_pilot',
   Marketing = 'marketing',
+  Pricing = 'pricing',
   Product = 'product',
   Rider = 'rider',
   TempAgency = 'temp_agency',
@@ -24738,7 +26065,7 @@ export type Subcategories = {
   category?: Maybe<Categories>;
   category_id?: Maybe<Scalars['uuid']>;
   created_at: Scalars['timestamptz'];
-  handle?: Maybe<Scalars['String']>;
+  handle: Scalars['String'];
   id: Scalars['uuid'];
   name: Scalars['String'];
   order?: Maybe<Scalars['Int']>;
@@ -24751,6 +26078,7 @@ export type Subcategories = {
   /** An aggregate relationship */
   subcategory_products_aggregate: Product_Subcategory_Aggregate;
   updated_at: Scalars['timestamptz'];
+  zone: Zone_Enum;
 };
 
 
@@ -24871,6 +26199,7 @@ export type Subcategories_Bool_Exp = {
   subcategory_bundles?: Maybe<Bundle_Subcategory_Bool_Exp>;
   subcategory_products?: Maybe<Product_Subcategory_Bool_Exp>;
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
+  zone?: Maybe<Zone_Enum_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "subcategories" */
@@ -24898,6 +26227,7 @@ export type Subcategories_Insert_Input = {
   subcategory_bundles?: Maybe<Bundle_Subcategory_Arr_Rel_Insert_Input>;
   subcategory_products?: Maybe<Product_Subcategory_Arr_Rel_Insert_Input>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate max on columns */
@@ -24981,6 +26311,7 @@ export type Subcategories_Order_By = {
   subcategory_bundles_aggregate?: Maybe<Bundle_Subcategory_Aggregate_Order_By>;
   subcategory_products_aggregate?: Maybe<Product_Subcategory_Aggregate_Order_By>;
   updated_at?: Maybe<Order_By>;
+  zone?: Maybe<Order_By>;
 };
 
 /** primary key columns input for table: subcategories */
@@ -25003,7 +26334,9 @@ export enum Subcategories_Select_Column {
   /** column name */
   Order = 'order',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** input type for updating data in table "subcategories" */
@@ -25015,6 +26348,7 @@ export type Subcategories_Set_Input = {
   name?: Maybe<Scalars['String']>;
   order?: Maybe<Scalars['Int']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  zone?: Maybe<Zone_Enum>;
 };
 
 /** aggregate stddev on columns */
@@ -25076,7 +26410,9 @@ export enum Subcategories_Update_Column {
   /** column name */
   Order = 'order',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  Zone = 'zone'
 }
 
 /** aggregate var_pop on columns */
@@ -25144,6 +26480,12 @@ export type Subscription_Root = {
   banners_aggregate: Banners_Aggregate;
   /** fetch data from the table: "banners" using primary key columns */
   banners_by_pk?: Maybe<Banners>;
+  /** An array relationship */
+  banners_warehouses: Array<Banners_Warehouses>;
+  /** An aggregate relationship */
+  banners_warehouses_aggregate: Banners_Warehouses_Aggregate;
+  /** fetch data from the table: "banners_warehouses" using primary key columns */
+  banners_warehouses_by_pk?: Maybe<Banners_Warehouses>;
   /** fetch data from the table: "batches" */
   batches: Array<Batches>;
   /** fetch aggregated fields from the table: "batches" */
@@ -25372,6 +26714,12 @@ export type Subscription_Root = {
   loyalty_event_reason_aggregate: Loyalty_Event_Reason_Aggregate;
   /** fetch data from the table: "loyalty_event_reason" using primary key columns */
   loyalty_event_reason_by_pk?: Maybe<Loyalty_Event_Reason>;
+  /** fetch data from the table: "nutriscores" */
+  nutriscores: Array<Nutriscores>;
+  /** fetch aggregated fields from the table: "nutriscores" */
+  nutriscores_aggregate: Nutriscores_Aggregate;
+  /** fetch data from the table: "nutriscores" using primary key columns */
+  nutriscores_by_pk?: Maybe<Nutriscores>;
   /** fetch data from the table: "operation_rule_handle" */
   operation_rule_handle: Array<Operation_Rule_Handle>;
   /** fetch aggregated fields from the table: "operation_rule_handle" */
@@ -25450,6 +26798,18 @@ export type Subscription_Root = {
   products_aggregate: Products_Aggregate;
   /** fetch data from the table: "products" using primary key columns */
   products_by_pk?: Maybe<Products>;
+  /** fetch data from the table: "rider_event_type" */
+  rider_event_type: Array<Rider_Event_Type>;
+  /** fetch aggregated fields from the table: "rider_event_type" */
+  rider_event_type_aggregate: Rider_Event_Type_Aggregate;
+  /** fetch data from the table: "rider_event_type" using primary key columns */
+  rider_event_type_by_pk?: Maybe<Rider_Event_Type>;
+  /** fetch data from the table: "rider_events" */
+  rider_events: Array<Rider_Events>;
+  /** fetch aggregated fields from the table: "rider_events" */
+  rider_events_aggregate: Rider_Events_Aggregate;
+  /** fetch data from the table: "rider_events" using primary key columns */
+  rider_events_by_pk?: Maybe<Rider_Events>;
   /** fetch data from the table: "rider_push_notification_tokens" */
   rider_push_notification_tokens: Array<Rider_Push_Notification_Tokens>;
   /** fetch aggregated fields from the table: "rider_push_notification_tokens" */
@@ -25592,6 +26952,12 @@ export type Subscription_Root = {
   transports_aggregate: Transports_Aggregate;
   /** fetch data from the table: "transports" using primary key columns */
   transports_by_pk?: Maybe<Transports>;
+  /** fetch data from the table: "uber_orders_missing_items" */
+  uber_orders_missing_items: Array<Uber_Orders_Missing_Items>;
+  /** fetch aggregated fields from the table: "uber_orders_missing_items" */
+  uber_orders_missing_items_aggregate: Uber_Orders_Missing_Items_Aggregate;
+  /** fetch data from the table: "uber_orders_missing_items" using primary key columns */
+  uber_orders_missing_items_by_pk?: Maybe<Uber_Orders_Missing_Items>;
   /** An array relationship */
   user_addresses: Array<User_Addresses>;
   /** An aggregate relationship */
@@ -25813,6 +27179,29 @@ export type Subscription_RootBanners_AggregateArgs = {
 
 
 export type Subscription_RootBanners_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootBanners_WarehousesArgs = {
+  distinct_on?: Maybe<Array<Banners_Warehouses_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Banners_Warehouses_Order_By>>;
+  where?: Maybe<Banners_Warehouses_Bool_Exp>;
+};
+
+
+export type Subscription_RootBanners_Warehouses_AggregateArgs = {
+  distinct_on?: Maybe<Array<Banners_Warehouses_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Banners_Warehouses_Order_By>>;
+  where?: Maybe<Banners_Warehouses_Bool_Exp>;
+};
+
+
+export type Subscription_RootBanners_Warehouses_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -26702,6 +28091,29 @@ export type Subscription_RootLoyalty_Event_Reason_By_PkArgs = {
 };
 
 
+export type Subscription_RootNutriscoresArgs = {
+  distinct_on?: Maybe<Array<Nutriscores_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Nutriscores_Order_By>>;
+  where?: Maybe<Nutriscores_Bool_Exp>;
+};
+
+
+export type Subscription_RootNutriscores_AggregateArgs = {
+  distinct_on?: Maybe<Array<Nutriscores_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Nutriscores_Order_By>>;
+  where?: Maybe<Nutriscores_Bool_Exp>;
+};
+
+
+export type Subscription_RootNutriscores_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
 export type Subscription_RootOperation_Rule_HandleArgs = {
   distinct_on?: Maybe<Array<Operation_Rule_Handle_Select_Column>>;
   limit?: Maybe<Scalars['Int']>;
@@ -26999,6 +28411,52 @@ export type Subscription_RootProducts_AggregateArgs = {
 
 
 export type Subscription_RootProducts_By_PkArgs = {
+  id: Scalars['uuid'];
+};
+
+
+export type Subscription_RootRider_Event_TypeArgs = {
+  distinct_on?: Maybe<Array<Rider_Event_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Rider_Event_Type_Order_By>>;
+  where?: Maybe<Rider_Event_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootRider_Event_Type_AggregateArgs = {
+  distinct_on?: Maybe<Array<Rider_Event_Type_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Rider_Event_Type_Order_By>>;
+  where?: Maybe<Rider_Event_Type_Bool_Exp>;
+};
+
+
+export type Subscription_RootRider_Event_Type_By_PkArgs = {
+  value: Scalars['String'];
+};
+
+
+export type Subscription_RootRider_EventsArgs = {
+  distinct_on?: Maybe<Array<Rider_Events_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Rider_Events_Order_By>>;
+  where?: Maybe<Rider_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootRider_Events_AggregateArgs = {
+  distinct_on?: Maybe<Array<Rider_Events_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Rider_Events_Order_By>>;
+  where?: Maybe<Rider_Events_Bool_Exp>;
+};
+
+
+export type Subscription_RootRider_Events_By_PkArgs = {
   id: Scalars['uuid'];
 };
 
@@ -27557,6 +29015,29 @@ export type Subscription_RootTransports_AggregateArgs = {
 
 export type Subscription_RootTransports_By_PkArgs = {
   value: Scalars['String'];
+};
+
+
+export type Subscription_RootUber_Orders_Missing_ItemsArgs = {
+  distinct_on?: Maybe<Array<Uber_Orders_Missing_Items_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Uber_Orders_Missing_Items_Order_By>>;
+  where?: Maybe<Uber_Orders_Missing_Items_Bool_Exp>;
+};
+
+
+export type Subscription_RootUber_Orders_Missing_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Uber_Orders_Missing_Items_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Uber_Orders_Missing_Items_Order_By>>;
+  where?: Maybe<Uber_Orders_Missing_Items_Bool_Exp>;
+};
+
+
+export type Subscription_RootUber_Orders_Missing_Items_By_PkArgs = {
+  id: Scalars['uuid'];
 };
 
 
@@ -29700,6 +31181,224 @@ export enum Transports_Update_Column {
   /** column name */
   Value = 'value'
 }
+
+/** columns and relationships of "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items = {
+  __typename?: 'uber_orders_missing_items';
+  available_quantity: Scalars['numeric'];
+  id: Scalars['uuid'];
+  order_id: Scalars['uuid'];
+  ordered_quantity: Scalars['numeric'];
+  product_id: Scalars['uuid'];
+};
+
+/** aggregated selection of "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items_Aggregate = {
+  __typename?: 'uber_orders_missing_items_aggregate';
+  aggregate?: Maybe<Uber_Orders_Missing_Items_Aggregate_Fields>;
+  nodes: Array<Uber_Orders_Missing_Items>;
+};
+
+/** aggregate fields of "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items_Aggregate_Fields = {
+  __typename?: 'uber_orders_missing_items_aggregate_fields';
+  avg?: Maybe<Uber_Orders_Missing_Items_Avg_Fields>;
+  count: Scalars['Int'];
+  max?: Maybe<Uber_Orders_Missing_Items_Max_Fields>;
+  min?: Maybe<Uber_Orders_Missing_Items_Min_Fields>;
+  stddev?: Maybe<Uber_Orders_Missing_Items_Stddev_Fields>;
+  stddev_pop?: Maybe<Uber_Orders_Missing_Items_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Uber_Orders_Missing_Items_Stddev_Samp_Fields>;
+  sum?: Maybe<Uber_Orders_Missing_Items_Sum_Fields>;
+  var_pop?: Maybe<Uber_Orders_Missing_Items_Var_Pop_Fields>;
+  var_samp?: Maybe<Uber_Orders_Missing_Items_Var_Samp_Fields>;
+  variance?: Maybe<Uber_Orders_Missing_Items_Variance_Fields>;
+};
+
+
+/** aggregate fields of "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Uber_Orders_Missing_Items_Select_Column>>;
+  distinct?: Maybe<Scalars['Boolean']>;
+};
+
+/** aggregate avg on columns */
+export type Uber_Orders_Missing_Items_Avg_Fields = {
+  __typename?: 'uber_orders_missing_items_avg_fields';
+  available_quantity?: Maybe<Scalars['Float']>;
+  ordered_quantity?: Maybe<Scalars['Float']>;
+};
+
+/** Boolean expression to filter rows from the table "uber_orders_missing_items". All fields are combined with a logical 'AND'. */
+export type Uber_Orders_Missing_Items_Bool_Exp = {
+  _and?: Maybe<Array<Uber_Orders_Missing_Items_Bool_Exp>>;
+  _not?: Maybe<Uber_Orders_Missing_Items_Bool_Exp>;
+  _or?: Maybe<Array<Uber_Orders_Missing_Items_Bool_Exp>>;
+  available_quantity?: Maybe<Numeric_Comparison_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  order_id?: Maybe<Uuid_Comparison_Exp>;
+  ordered_quantity?: Maybe<Numeric_Comparison_Exp>;
+  product_id?: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "uber_orders_missing_items" */
+export enum Uber_Orders_Missing_Items_Constraint {
+  /** unique or primary key constraint */
+  UberOrdersMissingItemsIdKey = 'uber_orders_missing_items_id_key',
+  /** unique or primary key constraint */
+  UberOrdersMissingItemsPkey = 'uber_orders_missing_items_pkey'
+}
+
+/** input type for incrementing numeric columns in table "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items_Inc_Input = {
+  available_quantity?: Maybe<Scalars['numeric']>;
+  ordered_quantity?: Maybe<Scalars['numeric']>;
+};
+
+/** input type for inserting data into table "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items_Insert_Input = {
+  available_quantity?: Maybe<Scalars['numeric']>;
+  id?: Maybe<Scalars['uuid']>;
+  order_id?: Maybe<Scalars['uuid']>;
+  ordered_quantity?: Maybe<Scalars['numeric']>;
+  product_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate max on columns */
+export type Uber_Orders_Missing_Items_Max_Fields = {
+  __typename?: 'uber_orders_missing_items_max_fields';
+  available_quantity?: Maybe<Scalars['numeric']>;
+  id?: Maybe<Scalars['uuid']>;
+  order_id?: Maybe<Scalars['uuid']>;
+  ordered_quantity?: Maybe<Scalars['numeric']>;
+  product_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate min on columns */
+export type Uber_Orders_Missing_Items_Min_Fields = {
+  __typename?: 'uber_orders_missing_items_min_fields';
+  available_quantity?: Maybe<Scalars['numeric']>;
+  id?: Maybe<Scalars['uuid']>;
+  order_id?: Maybe<Scalars['uuid']>;
+  ordered_quantity?: Maybe<Scalars['numeric']>;
+  product_id?: Maybe<Scalars['uuid']>;
+};
+
+/** response of any mutation on the table "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items_Mutation_Response = {
+  __typename?: 'uber_orders_missing_items_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Uber_Orders_Missing_Items>;
+};
+
+/** on conflict condition type for table "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items_On_Conflict = {
+  constraint: Uber_Orders_Missing_Items_Constraint;
+  update_columns?: Array<Uber_Orders_Missing_Items_Update_Column>;
+  where?: Maybe<Uber_Orders_Missing_Items_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "uber_orders_missing_items". */
+export type Uber_Orders_Missing_Items_Order_By = {
+  available_quantity?: Maybe<Order_By>;
+  id?: Maybe<Order_By>;
+  order_id?: Maybe<Order_By>;
+  ordered_quantity?: Maybe<Order_By>;
+  product_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: uber_orders_missing_items */
+export type Uber_Orders_Missing_Items_Pk_Columns_Input = {
+  id: Scalars['uuid'];
+};
+
+/** select columns of table "uber_orders_missing_items" */
+export enum Uber_Orders_Missing_Items_Select_Column {
+  /** column name */
+  AvailableQuantity = 'available_quantity',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrderId = 'order_id',
+  /** column name */
+  OrderedQuantity = 'ordered_quantity',
+  /** column name */
+  ProductId = 'product_id'
+}
+
+/** input type for updating data in table "uber_orders_missing_items" */
+export type Uber_Orders_Missing_Items_Set_Input = {
+  available_quantity?: Maybe<Scalars['numeric']>;
+  id?: Maybe<Scalars['uuid']>;
+  order_id?: Maybe<Scalars['uuid']>;
+  ordered_quantity?: Maybe<Scalars['numeric']>;
+  product_id?: Maybe<Scalars['uuid']>;
+};
+
+/** aggregate stddev on columns */
+export type Uber_Orders_Missing_Items_Stddev_Fields = {
+  __typename?: 'uber_orders_missing_items_stddev_fields';
+  available_quantity?: Maybe<Scalars['Float']>;
+  ordered_quantity?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Uber_Orders_Missing_Items_Stddev_Pop_Fields = {
+  __typename?: 'uber_orders_missing_items_stddev_pop_fields';
+  available_quantity?: Maybe<Scalars['Float']>;
+  ordered_quantity?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Uber_Orders_Missing_Items_Stddev_Samp_Fields = {
+  __typename?: 'uber_orders_missing_items_stddev_samp_fields';
+  available_quantity?: Maybe<Scalars['Float']>;
+  ordered_quantity?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate sum on columns */
+export type Uber_Orders_Missing_Items_Sum_Fields = {
+  __typename?: 'uber_orders_missing_items_sum_fields';
+  available_quantity?: Maybe<Scalars['numeric']>;
+  ordered_quantity?: Maybe<Scalars['numeric']>;
+};
+
+/** update columns of table "uber_orders_missing_items" */
+export enum Uber_Orders_Missing_Items_Update_Column {
+  /** column name */
+  AvailableQuantity = 'available_quantity',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrderId = 'order_id',
+  /** column name */
+  OrderedQuantity = 'ordered_quantity',
+  /** column name */
+  ProductId = 'product_id'
+}
+
+/** aggregate var_pop on columns */
+export type Uber_Orders_Missing_Items_Var_Pop_Fields = {
+  __typename?: 'uber_orders_missing_items_var_pop_fields';
+  available_quantity?: Maybe<Scalars['Float']>;
+  ordered_quantity?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate var_samp on columns */
+export type Uber_Orders_Missing_Items_Var_Samp_Fields = {
+  __typename?: 'uber_orders_missing_items_var_samp_fields';
+  available_quantity?: Maybe<Scalars['Float']>;
+  ordered_quantity?: Maybe<Scalars['Float']>;
+};
+
+/** aggregate variance on columns */
+export type Uber_Orders_Missing_Items_Variance_Fields = {
+  __typename?: 'uber_orders_missing_items_variance_fields';
+  available_quantity?: Maybe<Scalars['Float']>;
+  ordered_quantity?: Maybe<Scalars['Float']>;
+};
 
 /** columns and relationships of "user_addresses" */
 export type User_Addresses = {
@@ -33473,6 +35172,10 @@ export type Warehouses = {
   /** An aggregate relationship */
   warehouse_categories_aggregate: Warehouse_Category_Aggregate;
   /** An array relationship */
+  warehouse_feature_flags: Array<Warehouses_Features_Flag>;
+  /** An aggregate relationship */
+  warehouse_feature_flags_aggregate: Warehouses_Features_Flag_Aggregate;
+  /** An array relationship */
   warehouse_hours: Array<Warehouse_Hours>;
   /** An aggregate relationship */
   warehouse_hours_aggregate: Warehouse_Hours_Aggregate;
@@ -33561,6 +35264,26 @@ export type WarehousesWarehouse_Categories_AggregateArgs = {
   offset?: Maybe<Scalars['Int']>;
   order_by?: Maybe<Array<Warehouse_Category_Order_By>>;
   where?: Maybe<Warehouse_Category_Bool_Exp>;
+};
+
+
+/** columns and relationships of "warehouses" */
+export type WarehousesWarehouse_Feature_FlagsArgs = {
+  distinct_on?: Maybe<Array<Warehouses_Features_Flag_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Warehouses_Features_Flag_Order_By>>;
+  where?: Maybe<Warehouses_Features_Flag_Bool_Exp>;
+};
+
+
+/** columns and relationships of "warehouses" */
+export type WarehousesWarehouse_Feature_Flags_AggregateArgs = {
+  distinct_on?: Maybe<Array<Warehouses_Features_Flag_Select_Column>>;
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  order_by?: Maybe<Array<Warehouses_Features_Flag_Order_By>>;
+  where?: Maybe<Warehouses_Features_Flag_Bool_Exp>;
 };
 
 
@@ -33685,6 +35408,7 @@ export type Warehouses_Bool_Exp = {
   updated_at?: Maybe<Timestamptz_Comparison_Exp>;
   warehouse_areas?: Maybe<Warehouse_Areas_Bool_Exp>;
   warehouse_categories?: Maybe<Warehouse_Category_Bool_Exp>;
+  warehouse_feature_flags?: Maybe<Warehouses_Features_Flag_Bool_Exp>;
   warehouse_hours?: Maybe<Warehouse_Hours_Bool_Exp>;
   warehouse_operation_rules?: Maybe<Warehouse_Operation_Rule_Bool_Exp>;
   zone?: Maybe<Zone_Enum_Comparison_Exp>;
@@ -33729,6 +35453,20 @@ export type Warehouses_Features_Flag_Aggregate_FieldsCountArgs = {
   distinct?: Maybe<Scalars['Boolean']>;
 };
 
+/** order by aggregate values of table "warehouses_features_flag" */
+export type Warehouses_Features_Flag_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Warehouses_Features_Flag_Max_Order_By>;
+  min?: Maybe<Warehouses_Features_Flag_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "warehouses_features_flag" */
+export type Warehouses_Features_Flag_Arr_Rel_Insert_Input = {
+  data: Array<Warehouses_Features_Flag_Insert_Input>;
+  /** on conflict condition */
+  on_conflict?: Maybe<Warehouses_Features_Flag_On_Conflict>;
+};
+
 /** Boolean expression to filter rows from the table "warehouses_features_flag". All fields are combined with a logical 'AND'. */
 export type Warehouses_Features_Flag_Bool_Exp = {
   _and?: Maybe<Array<Warehouses_Features_Flag_Bool_Exp>>;
@@ -33757,11 +35495,23 @@ export type Warehouses_Features_Flag_Max_Fields = {
   warehouse_id?: Maybe<Scalars['uuid']>;
 };
 
+/** order by max() on columns of table "warehouses_features_flag" */
+export type Warehouses_Features_Flag_Max_Order_By = {
+  feature?: Maybe<Order_By>;
+  warehouse_id?: Maybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Warehouses_Features_Flag_Min_Fields = {
   __typename?: 'warehouses_features_flag_min_fields';
   feature?: Maybe<Scalars['String']>;
   warehouse_id?: Maybe<Scalars['uuid']>;
+};
+
+/** order by min() on columns of table "warehouses_features_flag" */
+export type Warehouses_Features_Flag_Min_Order_By = {
+  feature?: Maybe<Order_By>;
+  warehouse_id?: Maybe<Order_By>;
 };
 
 /** response of any mutation on the table "warehouses_features_flag" */
@@ -33859,6 +35609,7 @@ export type Warehouses_Insert_Input = {
   updated_at?: Maybe<Scalars['timestamptz']>;
   warehouse_areas?: Maybe<Warehouse_Areas_Arr_Rel_Insert_Input>;
   warehouse_categories?: Maybe<Warehouse_Category_Arr_Rel_Insert_Input>;
+  warehouse_feature_flags?: Maybe<Warehouses_Features_Flag_Arr_Rel_Insert_Input>;
   warehouse_hours?: Maybe<Warehouse_Hours_Arr_Rel_Insert_Input>;
   warehouse_operation_rules?: Maybe<Warehouse_Operation_Rule_Arr_Rel_Insert_Input>;
   zone?: Maybe<Zone_Enum>;
@@ -33984,6 +35735,7 @@ export type Warehouses_Order_By = {
   updated_at?: Maybe<Order_By>;
   warehouse_areas_aggregate?: Maybe<Warehouse_Areas_Aggregate_Order_By>;
   warehouse_categories_aggregate?: Maybe<Warehouse_Category_Aggregate_Order_By>;
+  warehouse_feature_flags_aggregate?: Maybe<Warehouses_Features_Flag_Aggregate_Order_By>;
   warehouse_hours_aggregate?: Maybe<Warehouse_Hours_Aggregate_Order_By>;
   warehouse_operation_rules_aggregate?: Maybe<Warehouse_Operation_Rule_Aggregate_Order_By>;
   zone?: Maybe<Order_By>;
@@ -34452,7 +36204,7 @@ export type GetUserWithOrdersQueryVariables = Exact<{
 }>;
 
 
-export type GetUserWithOrdersQuery = { __typename?: 'query_root', users_by_pk?: { __typename?: 'users', first_name?: string | null | undefined, last_name?: string | null | undefined, orders: Array<{ __typename?: 'orders', paid_at?: any | null | undefined, order_items: Array<{ __typename?: 'order_items', ttc_price: any, product: { __typename?: 'products', name: string } }> }> } | null | undefined };
+export type GetUserWithOrdersQuery = { __typename?: 'query_root', users_by_pk?: { __typename?: 'users', first_name?: string | null | undefined, last_name?: string | null | undefined, email?: string | null | undefined, user_number: number, orders: Array<{ __typename?: 'orders', delivery_fee_refunded_amount?: any | null | undefined, coupon_code?: string | null | undefined, address_line_1: string, address_line_2?: string | null | undefined, address_postal_code: string, address_city: string, paid_at?: any | null | undefined, number: number, order_items_aggregate: { __typename?: 'order_items_aggregate', aggregate?: { __typename?: 'order_items_aggregate_fields', sum?: { __typename?: 'order_items_sum_fields', ttc_price?: any | null | undefined, original_ttc_price?: any | null | undefined } | null | undefined } | null | undefined }, order_items: Array<{ __typename?: 'order_items', ttc_price: any, product: { __typename?: 'products', id: any, name: string } }> }> } | null | undefined };
 
 
 export const GetUserWithOrdersDocument = gql`
@@ -34460,11 +36212,29 @@ export const GetUserWithOrdersDocument = gql`
   users_by_pk(id: $id) {
     first_name
     last_name
+    email
+    user_number
     orders {
+      delivery_fee_refunded_amount
+      coupon_code
+      address_line_1
+      address_line_2
+      address_postal_code
+      address_city
       paid_at
+      number
+      order_items_aggregate {
+        aggregate {
+          sum {
+            ttc_price
+            original_ttc_price
+          }
+        }
+      }
       order_items {
         ttc_price
         product {
+          id
           name
         }
       }

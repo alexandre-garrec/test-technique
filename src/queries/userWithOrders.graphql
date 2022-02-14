@@ -2,11 +2,30 @@ query GetUserWithOrders($id: uuid!) {
   users_by_pk(id: $id) {
     first_name
     last_name
+    email
+    user_number
     orders {
+      delivery_fee_refunded_amount
+      coupon_code
+      address_line_1
+      address_line_2
+      address_postal_code
+      address_city
       paid_at
+      number
+
+      order_items_aggregate {
+        aggregate {
+          sum {
+            ttc_price
+            original_ttc_price
+          }
+        }
+      }
       order_items {
         ttc_price
         product {
+          id
           name
         }
       }
